@@ -6,6 +6,7 @@ import Pickup from './pickup'
 
 
 export default function Home() {
+    new Promise((resolve)=> setTimeout(resolve,4000))
  
   return (
     <div className=' w-[100vw]'>

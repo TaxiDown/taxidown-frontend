@@ -3,7 +3,6 @@ import React from 'react'
 import Signupform from './form.jsx'
 
 export default function SignupPage() {
-
   return (
     <div className='flex items-center h-screen w-screen justify-between '>
         <div className='text-center flex justify-center items-center flex-col lg:w-[33vw] md:w-[40vw] shadow-2xl h-[100vh] bg-[#fcfcfa] w-[100vw]'>
