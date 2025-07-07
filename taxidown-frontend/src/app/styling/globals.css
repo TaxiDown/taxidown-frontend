@@ -172,10 +172,16 @@ ul{
   left: 10px;
   color: black;
   background-color: #fcfcfa;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  
 }
 .pickup:focus , .pickup:valid{
   border:  1.5px solid black;
   box-shadow:  none;
+}
+.shadow-custom{
+  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.133);
 }
 
 

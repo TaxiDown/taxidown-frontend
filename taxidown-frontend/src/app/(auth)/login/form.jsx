@@ -17,9 +17,15 @@ export default function Loginform() {
     const onSubmit = async(e) =>{
 
         e.preventDefault();
-        const response = await Login({email, password});
-
-        switch (response) {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email: email, password: password }),
+        });
+        setCode(response.status);
+        console.log(response);
+        switch (response.status) {
             case 200 :
               setresponse('Logged in successfully!');
               setTimeout(() => {
@@ -40,7 +46,7 @@ export default function Loginform() {
               break;
       
             case 500 :
-              setresponse(`Server error.\nplease, try again`);
+              setresponse(`You are \nalready logged In!`);
               break;
       
             default:
