@@ -2,8 +2,8 @@
 import React from 'react'
 import Fleet from '../home/fleet';
 
-export default async function GetFleets() {
-    const response = await fetch(`http://127.0.0.1:8000/api/vehicles/vehicle-categories/`, {
+export default async function GetFlets() {
+    const response = await fetch(`${process.env.API_URL}api/vehicles/vehicle-categories/`, {
         credentials: 'include',
         method: 'GET',
         headers: {

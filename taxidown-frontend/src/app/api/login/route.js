@@ -12,21 +12,18 @@ export async function POST(request) {
     let status = null;
     
     try{
-      const res = await fetch(`http://127.0.0.1:8000/api/auth/login/`, {
+      const res = await fetch(`${process.env.API_URL}api/auth/login/`, {
         cache: "no-store",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
         'Content-Type': 'application/json',
-        'Cookie': cookieHeader,
         },
       });
       status = res.status
       if (res.status==200){
         const cookieHeader = res.headers.get('Set-Cookie');
         const response = NextResponse.json({ message: 'Login OK' });
-
-      
         response.headers.set('Set-Cookie', cookieHeader);
         return response
       }

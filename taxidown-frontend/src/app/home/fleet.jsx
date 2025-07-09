@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function Fleet({}) {
+export default function Fleet({title, image}) {
   return (
-    <div></div>
+    <div>{title}</div>
   )
 }

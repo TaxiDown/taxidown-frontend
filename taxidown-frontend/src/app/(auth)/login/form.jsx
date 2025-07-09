@@ -3,6 +3,7 @@ import React, { useState, Suspense } from 'react'
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Login from '@/app/actions/login';
+import Link from 'next/link';
 
 
 export default function Loginform() {
@@ -15,7 +16,6 @@ export default function Loginform() {
    
     
     const onSubmit = async(e) =>{
-
         e.preventDefault();
         const response = await fetch('/api/login', {
           method: 'POST',
@@ -92,9 +92,12 @@ export default function Loginform() {
                 </button>
             }
         </div>
-        <button type="submit" className={email && password ? 'cursor-pointer bg-black text-white rounded-sm text-[19px] w-25 h-12 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black mb-3 mt-1' : 'cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[19px] w-25 h-12 border-2 border-[#ccc] mb-2 mt-1'}>
-         Login
-        </button>
+        <div className='flex items-center justify-center flex-col'>
+          <Link href='/forgot_password' className=' cursor-pointer w-full text-right text-[13px] mb-1 mt-[-15px] px-2 text-neutral-900 hover:text-yellow-600'>Forgot password?</Link>
+          <button type="submit" className={email && password ? 'cursor-pointer bg-black text-white rounded-sm text-[19px] w-25 h-12 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black mb-3 mt-1' : 'cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[19px] w-25 h-12 border-2 border-[#ccc] mb-2 mt-1'}>
+          Login
+          </button>
+        </div>
         {response &&
           <div className={`mt-3 text-[18px] whitespace-pre-line ${
             code == 200 ? 'text-green-500' : 'text-red-500'

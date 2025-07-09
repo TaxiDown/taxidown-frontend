@@ -1,8 +1,9 @@
-import React from 'react'
+import {React} from 'react'
 import Navbar from './nav'
 import Footer from './footer'
 import Pickup from './pickup'
-import GetFleets from '../actions/getFleets'
+import GetFleets from './getfleets'
+import Pick from './pick'
 
 
 
@@ -12,7 +13,7 @@ export default function Home() {
     <div className=' w-[100vw]'>
         <Navbar />
         <div className='lg:w-full lg:h-screen lg:bg-[url(/home2.png)] lg:bg-cover '>
-            <Pickup/>
+            <Pick/>
         </div>
         <div className='flex flex-col justify-center items-center '>
             <h1 className='text-[50px] truculenta font-medium m-6 mt-8'>Our features</h1>
@@ -41,11 +42,10 @@ export default function Home() {
             </div>
             <div className='text-white bg-[url(/car2.png)] h-[100vh] bg-cover bg-center w-full relative flex flex-col items-center justify-center'>
                 <div className="absolute inset-0 bg-black/70 z-0"></div>
-                <h1 className='text-[45px] text-white font-bold z-30'>Our Fleet</h1>
-                <div>
-                    <div>Lorem Ipsum</div>
+                <div className="z-10 flex flex-col items-center">
+                    <h1 className='text-[45px] text-white font-bold'>Our Fleet</h1>
+                    <GetFleets />
                 </div>
-
             </div>
         </div>
         <Footer />

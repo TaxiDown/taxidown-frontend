@@ -50,7 +50,7 @@ body {
   margin-bottom: 20px;
   width: 100%;
   box-sizing: content-box;
-  display: flexbox;
+  display: flex;
 
 }
 
@@ -184,6 +184,20 @@ ul{
   box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.133);
 }
 
+.red-wrapper input:valid, .red-wrapper input:focus{
+  border: 1.5px solid oklch(57.7% 0.245 27.325);
+  box-shadow:  none;
+
+}
+.red-wrapper .input:focus+.label, .red-wrapper .input:valid+.label{
+  color: #d70000;
+}
+.red-wrapper span{
+  font-size: 15px;
+}
+.red-wrapper{
+  margin-bottom: 8px;
+}
 
 
 

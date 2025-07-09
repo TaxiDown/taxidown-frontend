@@ -20,6 +20,7 @@ export default function Signupform() {
   const [code, setCode] = useState(0)
   const [data, updateData] = useState(userData);
   const [confirmationPassword, setConfirmPassword] = useState('');
+  const [validEmail, setValidEmail] = useState(true);
 
   const handelChange = (e)=>{
     setresponse('')
@@ -31,13 +32,20 @@ export default function Signupform() {
       if(!validatePassword(e.target.value))
         setConfirmPassword('')
     }
+    if(e.target.name == 'email')
+      setValidEmail(true);
   }
 
   const confirmPassword = (e)=>{
     setConfirmPassword(e.target.value)
   }
+  function isValidEmail(email) {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/i.test(email);
+  }
+
   
   const onSubmit = async (e) => {
+    e.preventDefault();
     const email = data.email;
     const password = data.password;
     const password2 = confirmationPassword;
@@ -45,7 +53,14 @@ export default function Signupform() {
     const lastname = data.lastname;
     const phone = data.phone;
 
-    e.preventDefault();
+    console.log(isValidEmail(email));
+    if (!isValidEmail(email)) {
+      setValidEmail(false);
+      prevPage();
+      return;
+    }else
+      setValidEmail(true);
+
     const res = await CreateAccount({email, password, password2, firstname, lastname, phone});
     setCode(res);
     switch (res) {
@@ -53,7 +68,7 @@ export default function Signupform() {
         setresponse(`Account created successfully! \n You will be redirected to the login page.`);
         setTimeout(() => {
           router.push("/login");
-        }, 5000);
+        }, 1000);
         break;
 
       case 400:
@@ -111,7 +126,7 @@ return (
   <form onSubmit={onSubmit} className='mb-3'>
       {page == 1 &&
       <>
-      <div className='input-wrapper'>
+      <div className={`input-wrapper flex-col ${!validEmail ? 'red-wrapper':""}`}>
           <input type="text" 
               name = "email"
               onChange = {handelChange}
@@ -122,6 +137,8 @@ return (
           />
           <label htmlFor="email" className="label"
           >Email*</label>
+          {!validEmail && <span className='text-center m-auto flex items-center justify-center text-red-600 w-full'>Invalid Email</span>}
+
       </div>
       
       <div className='input-wrapper'>
