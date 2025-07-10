@@ -1,8 +1,13 @@
 import Link from 'next/link'
 import React from 'react'
 import Signupform from './form.jsx'
+import { getDictionary } from '../dictionaries'
 
-export default function SignupPage() {
+
+export default async function SignupPage({params}) {
+  const { lang } = await params
+  const dict = await getDictionary(lang)
+   
   return (
     <div className='flex items-center h-screen w-screen justify-between '>
         <div className='text-center flex justify-center items-center flex-col lg:w-[33vw] md:w-[40vw] shadow-2xl h-[100vh] bg-[#fcfcfa] w-[100vw]'>

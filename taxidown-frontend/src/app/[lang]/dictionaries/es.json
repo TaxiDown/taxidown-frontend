@@ -1,0 +1,34 @@
+{
+"lang": {
+    "loginTitle": "Iniciar sesión",
+    "appTitle": "TaxiDrive",
+    "pickupTripNow": "¡Reserva tu viaje ahora!",
+    "oneWay": "Solo ida",
+    "perHour": "Por hora",
+    "pickupLocation": "Lugar de recogida",
+    "destination": "Destino",
+    "date": "Fecha",
+    "time": "Hora",
+    "getOffer": "Obtener oferta",
+    "home": "Inicio",
+    "contactUs": "Contáctanos"
+  },
+  "auth": {
+    "resetPassword": "Restablecer contraseña",
+    "sendResetEmail": "Enviar correo de restablecimiento",
+    "confirmationExpired": "Confirmación caducada",
+    "confirmationExpiredMessage": "El enlace de confirmación ha caducado. Por favor, solicita un nuevo correo de verificación.",
+    "resendConfirmationEmail": "Reenviar correo de confirmación",
+    "emailConfirmed": "Correo confirmado",
+    "goToLogin": "Ir a Iniciar sesión",
+    "emailVerifiedMessage": "Tu correo electrónico ha sido verificado con éxito. ¡Ahora puedes iniciar sesión en tu cuenta!",
+    "loginTitle": "Iniciar sesión",
+    "createAccountTitle": "Crea tu cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crear cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  }
+}

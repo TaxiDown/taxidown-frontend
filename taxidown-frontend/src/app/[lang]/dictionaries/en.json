@@ -1,0 +1,34 @@
+{
+  "lang": {
+    "appTitle": "TaxiDrive",
+    "pickupTripNow": "Pickup your trip now!",
+    "oneWay": "One-way",
+    "perHour": "Per Hour",
+    "pickupLocation": "Pickup Location",
+    "destination": "Destination",
+    "loginTitle": "Login",
+    "date": "Date",
+    "time": "Time",
+    "getOffer": "Get Offer",
+    "home": "Home",
+    "contactUs": "Contact us"
+  },
+  "auth":{
+    "loginTitle": "Login",
+    "createAccountTitle": "Create Your Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "resetPassword": "Reset Password",
+    "sendResetEmail": "Send Reset Email",
+    "confirmationExpired": "Confirmation Expired",
+    "confirmationExpiredMessage": "The confirmation link has expired. Please request a new verification email.",
+    "resendConfirmationEmail": "Resend Confirmation Email",
+    "emailConfirmed": "Email Confirmed",
+    "goToLogin": "Go to Login",
+    "emailVerifiedMessage": "Your email has been successfully verified. You can now log In to your account!"
+  }
+}

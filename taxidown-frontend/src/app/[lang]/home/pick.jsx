@@ -2,8 +2,7 @@
 import {React, useEffect, useState, useRef} from 'react'
 import { MapPinIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid'
 
-
-export default function Pick() {
+export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer}) {
     const [pickupDate, setPickupDate] = useState('');
     const [pickupTime, setPickupTime] = useState('');
     const [isOneWay, setIsOneWay] = useState(true);
@@ -71,13 +70,13 @@ export default function Pick() {
     };   
   return (
     <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 lg:mt-12 mt-25 mb-20 h-[500px] lg:h-max lg:w-max lg:shadow-lg lg:absolute lg:inset-y-25 lg:left-30 lg:bg-white/20 lg:backdrop-blur-md lg:rounded-xl'>
-        <h1 className='text-[40px] truculenta font-medium m-6'>Pickup your trip now!</h1>
+        <h1 className='text-[40px] truculenta font-medium m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
             <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>setIsOneWay(true)}>
-                <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>One-way</button>
+                <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
             <button type="button" className={`w-40 text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>setIsOneWay(false)}>
                 <ClockIcon className={`w-6 h-6 ${isOneWay ? 'text-black' : 'text-white'} `} />
-                Per Hour</button>
+                {perHour}</button>
         </div>
         <div className='flex items-center justify-center flex-col'>
 
@@ -94,7 +93,7 @@ export default function Pick() {
                     }}
                     required
                 />
-                <label htmlFor="pickup" className="label">Pickup Location</label>
+                <label htmlFor="pickup" className="label">{pickupLocation}</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -131,7 +130,7 @@ export default function Pick() {
                     }}
                     required
                 />
-                <label htmlFor="destination" className="label">Destination</label>
+                <label htmlFor="destination" className="label">{destination}</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -187,8 +186,8 @@ export default function Pick() {
         </div>
 
         {/* Submit */}
-        <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-8' type='submit'>
-            Get Offer
+        <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-8 min-w-max' type='submit'>
+            {getOffer}
         </button>        
         </div>
     </form>

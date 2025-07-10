@@ -6,7 +6,7 @@ import Login from '@/app/actions/login';
 import Link from 'next/link';
 
 
-export default function Loginform() {
+export default function Loginform({loginTitle, dontHaveAccount, createAccount, forgotPassword, pass, em}) {
     const router = useRouter();
     const [code, setCode] = useState(0)
     const [response, setresponse] = useState('')
@@ -67,7 +67,7 @@ export default function Loginform() {
                 required
             />
             <label htmlFor="email" className="label"
-            >Email*</label>
+            >{em}*</label>
         </div>
         
         <div className='input-wrapper'>
@@ -81,7 +81,7 @@ export default function Loginform() {
                 required
             />
             <label htmlFor="password" className="label"
-            >Password*</label>
+            >{pass}*</label>
             {password && 
                 <button
                 type="button"
@@ -93,9 +93,9 @@ export default function Loginform() {
             }
         </div>
         <div className='flex items-center justify-center flex-col'>
-          <Link href='/forgot_password' className=' cursor-pointer w-full text-right text-[13px] mb-1 mt-[-15px] px-2 text-neutral-900 hover:text-yellow-600'>Forgot password?</Link>
-          <button type="submit" className={email && password ? 'cursor-pointer bg-black text-white rounded-sm text-[19px] w-25 h-12 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black mb-3 mt-1' : 'cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[19px] w-25 h-12 border-2 border-[#ccc] mb-2 mt-1'}>
-          Login
+          <Link href='/forgot_password' className=' cursor-pointer w-full text-right text-[13px] mb-1 mt-[-15px] px-2 text-neutral-900 hover:text-yellow-600'>{forgotPassword}</Link>
+          <button type="submit" className={email && password ? 'cursor-pointer bg-black text-white rounded-sm text-[19px] w-25 h-12 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black mb-3 mt-1 min-w-max px-3' : 'cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[19px] w-25 h-12 border-2 border-[#ccc] mb-2 mt-1 min-w-max px-3'}>
+          {loginTitle}
           </button>
         </div>
         {response &&

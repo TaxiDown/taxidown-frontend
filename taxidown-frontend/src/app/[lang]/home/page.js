@@ -4,16 +4,18 @@ import Footer from './footer'
 import Pickup from './pickup'
 import GetFleets from './getfleets'
 import Pick from './pick'
+import { getDictionary } from '../dictionaries'
 
 
 
-export default function Home() {
- 
+export default async function Home({params}) {
+  const { lang } = await params
+  const dict = await getDictionary(lang) // en
   return (
     <div className=' w-[100vw]'>
-        <Navbar />
+        <Navbar home={dict.lang.home} contactUs={dict.lang.contactUs} loginTitle={dict.lang.loginTitle}/>
         <div className='lg:w-full lg:h-screen lg:bg-[url(/home2.png)] lg:bg-cover '>
-            <Pick/>
+            <Pick pick={dict.lang.pickupTripNow} oneWay={dict.lang.oneWay} perHour={dict.lang.perHour} pickupLocation={dict.lang.pickupLocation} destination={dict.lang.destination} getOffer={dict.lang.getOffer}/>
         </div>
         <div className='flex flex-col justify-center items-center '>
             <h1 className='text-[50px] truculenta font-medium m-6 mt-8'>Our features</h1>
