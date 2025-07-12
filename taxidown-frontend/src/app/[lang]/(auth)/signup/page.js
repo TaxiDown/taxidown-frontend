@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Signupform from './form.jsx'
-import { getDictionary } from '../dictionaries'
+import { getDictionary } from '../../dictionaries.js'
 
 
 export default async function SignupPage({params}) {
@@ -14,7 +14,7 @@ export default async function SignupPage({params}) {
             <h1 className='text-[37px] truculenta font-medium mt-8 p-0 bg-gradient-to-r from-black via-red-700 to-yellow-400 bg-clip-text text-transparent'>TaxiDrive</h1>
             <h3 className='text-[27px] truculenta font-bold mb-6 font-black'>Create Your Account</h3>
             <Signupform />
-            <div className='text-[14px] mt-1'>Already have an account?  <Link href='login' className='text-yellow-500 hover:text-yellow-600'>Login</Link>
+            <div className='text-[14px] mt-1'>Already have an account?  <Link href='/en/login' className='text-yellow-500 hover:text-yellow-600'>Login</Link>
             </div>
         </div>
         <div className='md:relative lg:w-[67vw] md:w-[60vw] md:h-[100vh] md:bg-[url(/image.png)] md:bg-cover md:flex hidden '>

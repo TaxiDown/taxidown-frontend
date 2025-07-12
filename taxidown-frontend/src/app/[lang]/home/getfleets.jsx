@@ -19,10 +19,13 @@ export default function GetFleets() {
         fetchData();
     },[])
   return (
-    <div className='text-white text-center'>
-        {fleets.map((fleet)=>{
-            return <Fleet key={fleet.id} image={fleet.image_path} title={fleet.name_category}/>
-        })}
+    <div className="py-10 px-4">        
+        <div className="flex flex-wrap justify-center gap-10 max-w-6xl mx-auto">
+            {fleets.map((fleet) => (
+            <Fleet key={fleet.id} image={fleet.image_path} title={fleet.name_category} />
+            ))}
+        </div>
     </div>
+
   )
 }

@@ -69,7 +69,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         e.preventDefault(); 
     };   
   return (
-    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 lg:mt-12 mt-25 mb-20 h-[500px] lg:h-max lg:w-max lg:shadow-lg lg:absolute lg:inset-y-25 lg:left-30 lg:bg-white/20 lg:backdrop-blur-md lg:rounded-xl'>
+    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-25 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
         <h1 className='text-[40px] truculenta font-medium m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
             <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>setIsOneWay(true)}>

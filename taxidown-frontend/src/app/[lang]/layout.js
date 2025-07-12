@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body className="w-[100vw] h-lvh overflow-x-hidden">{children}</body>
+      <body className="w-[100vw] h-lvh overflow-x-hidden " wotdisconnected="true">{children}</body>
     </html>
   );
 }
