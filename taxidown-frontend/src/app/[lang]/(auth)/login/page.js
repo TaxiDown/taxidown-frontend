@@ -10,7 +10,7 @@ export default async function LoginPage({params}) {
   return (
     <div className='flex items-center h-screen w-screen justify-between '>
         <div className='text-center flex justify-center items-center flex-col lg:w-[33vw] md:w-[40vw] shadow-2xl h-[100vh] bg-[#fcfcfa] w-[100vw]'>
-        <h1 className='text-[50px] truculenta font-medium m-6 mt-8'>TaxiDrive</h1>
+        <h1 className='text-[50px] truculenta font-medium m-6 mt-8'>TaxiDown</h1>
             <Loginform loginTitle={dict.auth.loginTitle} em={dict.auth.email} pass={dict.auth.password} forgotPassword={dict.auth.forgotPassword}/>
             <div className='text-[13px] mt-2'>
                 {dict.auth.dontHaveAccount}  <Link href='/en/signup' className='text-yellow-500 hover:text-yellow-600'>
