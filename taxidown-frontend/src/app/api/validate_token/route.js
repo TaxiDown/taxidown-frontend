@@ -22,7 +22,7 @@ export async function POST(){
       });
       console.log(res);
       status = res.status
-      if (res.status==200){
+      if (res.status === 200){
         const response = NextResponse.json({ message: 'valid Token' , status : '200'});
         return response
       }else 

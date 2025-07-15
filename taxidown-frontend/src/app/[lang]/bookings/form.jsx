@@ -28,7 +28,7 @@ export default function BookingForm({pickup, destination}) {
     {Array.isArray(rides) && rides &&
         <div className='mb-20 w-full space-y-7'>
             {rides.map((ride, index) => (
-                <Ride key={`ride ${ride.id}`} pickupText={pickup} destinationText={destination} pickup={ride.booking.pickup_location.name_location} destination={ride.booking.dropoff_location.name_location} date={ride.booking.datetime_pickup} time={'11:20'}/>
+                <Ride key={`ride ${ride.id}`} pickupText={pickup} destinationText={destination} pickup={ride.booking.pickup_location.name_location} destination={ride.booking.dropoff_location.name_location} date={ride.booking.datetime_pickup.split("T")[0]} time={ride.booking.datetime_pickup.split("T")[1].replace("Z", "")}/>
             ))}
         </div>
     }

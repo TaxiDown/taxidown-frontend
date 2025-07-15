@@ -25,6 +25,8 @@ export async function GET() {
             const res = NextResponse.json(fleets.results);
             res.headers.set('Set-Cookie', cookieHeader)
             return res
+        }else{
+            return NextResponse.json({ status: status })
         }
     }catch(err){
         return NextResponse.json({ message: `Error ${err}` }, { status: status })

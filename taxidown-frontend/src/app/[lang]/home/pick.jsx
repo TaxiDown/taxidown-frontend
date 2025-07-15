@@ -1,7 +1,7 @@
 'use client'
 import {React, useEffect, useState, useRef} from 'react'
 import { MapPinIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid'
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer}) {
@@ -80,20 +80,17 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         }else if(!destinationID){
             setvalidDestination(false);
         }else{
+            const datetime_pickup = new Date(`${pickupDate}T${pickupTime}:00`);
             const response = await fetch(`/api/create_ride`,{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ id_pickup_location: pickupID, id_dropoff_location: destinationID, datetime_pickup:pickupDate, id_vehicle_category:"1"}),
+                body: JSON.stringify({ id_pickup_location: pickupID, id_dropoff_location: destinationID, datetime_pickup: `${pickupDate}T${pickupTime}:00`, id_vehicle_category:"1"}),
             })
             if(response.ok){
                 const data = await response.json();
                 console.log(data);
-                setShowSuccess(true);
-
-                setTimeout(() => {
-                    setShowSuccess(false);
-                }, 7000);
+                router.push('/en/bookings');
 
             }else if(response.status == 401){
                 router.push("/en/login");

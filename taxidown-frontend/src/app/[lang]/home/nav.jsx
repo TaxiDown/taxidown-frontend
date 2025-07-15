@@ -24,7 +24,7 @@ export default function Navbar({home, contactUs, loginTitle, bookingTitle}) {
         <h3 className='text-[22px] font-bold'>TaxiDown</h3>
         <div className='flex md:gap-10 md:mr-7 gap-5'>
             <Link href='/en' className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{home}</Link>   
-            <Link href='/' className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{contactUs}</Link>    
+            <Link href='/en/contactus' className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{contactUs}</Link>    
             {
               loggedIn ?
               <Link href='/en/bookings' className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{bookingTitle}</Link>             
