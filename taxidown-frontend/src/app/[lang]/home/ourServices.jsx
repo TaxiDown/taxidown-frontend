@@ -47,7 +47,7 @@ const services = [
 
 export default function OurServices() {
   return (
-    <section className="py-16 px-4 bg-white text-center px-10">
+    <section className="py-16 px-4 text-center px-10">
       <h2 className="text-4xl font-bold mb-4">Our Services</h2>
       <p className="text-gray-600 max-w-2xl mx-auto mb-10">
         We offer premium transportation services tailored to meet your needs. Ride in style with comfort and punctuality.

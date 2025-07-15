@@ -187,7 +187,6 @@ ul{
 .red-wrapper input:valid, .red-wrapper input:focus{
   border: 1.5px solid oklch(57.7% 0.245 27.325);
   box-shadow:  none;
-  outline: none;
 
 }
 .red-wrapper .input:focus+.label, .red-wrapper .input:valid+.label{

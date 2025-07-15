@@ -1,22 +1,30 @@
 'use client'
 import {React, useEffect, useState, useRef} from 'react'
 import { MapPinIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid'
+import { useRouter } from "next/navigation";
+import SuccessModal from './modal';
 
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer}) {
+    const router = useRouter();
+    const [showSuccess, setShowSuccess] = useState(false);
     const [pickupDate, setPickupDate] = useState('');
     const [pickupTime, setPickupTime] = useState('');
     const [isOneWay, setIsOneWay] = useState(true);
     const [pickupQuery, setpickupQuery] = useState('');
+    const [pickupID, setPickupID] = useState('');
     const [pickupResults, setpickupResults] = useState([]);
     const [destinationQuery, setdestinationQuery] = useState('');
+    const [destinationID, setDestinationID] = useState('');
     const [destinationResults, setdestinationResults] = useState([]);
     const [showpickupResults, setShowpickupResults] = useState(false);
     const [showDestinationResults, setShowDestinationResults] = useState(false);
+    const [validPickup, setvalidPickup] = useState(true);
+    const [validDestination, setvalidDestination] = useState(true);
     const pickupRef = useRef(null);
     const destinationRef = useRef(null);
 
     useEffect(() => {
-          if (pickupQuery.length < 3 && !destinationQuery) {
+          if (pickupQuery.length < 1 ) {
             setpickupResults([]);
             return;
           }
@@ -36,7 +44,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         }, [pickupQuery]);
     
     useEffect(() => {
-        if (destinationQuery.length < 3 && !pickupQuery) {
+        if (destinationQuery.length < 1) {
             setdestinationResults([]);
             return;
         }
@@ -65,8 +73,32 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault(); 
+        if(!pickupID){
+            setvalidPickup(false);
+        }else if(!destinationID){
+            setvalidDestination(false);
+        }else{
+            const response = await fetch(`/api/create_ride`,{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ id_pickup_location: pickupID, id_dropoff_location: destinationID, datetime_pickup:pickupDate, id_vehicle_category:"1"}),
+            })
+            if(response.ok){
+                const data = await response.json();
+                console.log(data);
+                setShowSuccess(true);
+
+                setTimeout(() => {
+                    setShowSuccess(false);
+                }, 7000);
+
+            }else if(response.status == 401){
+                router.push("/en/login");
+            }
+        }
     };   
   return (
     <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-25 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
@@ -82,12 +114,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {/* Pickup Input */}
         <div ref={pickupRef} style={{ position: 'relative', width: '100%' }}>
-            <div className='input-wrapper'>
-                <input type="text"
+        <div className={`input-wrapper ${!validPickup ? 'red-wrapper' : ''}`}>                <input type="text"
                     id="pickup"
                     className='input pickup'
                     value={pickupQuery}
                     onChange={(e) => {
+                        setPickupID('')
                         setpickupQuery(e.target.value);
                         setShowpickupResults(true);
                     }}
@@ -98,14 +130,17 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
             </div>
+            {!validPickup && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid pickup locations.</div>}
             {showpickupResults && pickupResults.length > 0 && (
                 <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10">
                     {pickupResults.map((place, idx) => (
                         <div
                             key={idx}
                             onClick={() => {
+                                setPickupID(place.id)
                                 setpickupQuery(place.name_location);
                                 setShowpickupResults(false);
+                                setvalidPickup(true);
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
@@ -119,12 +154,13 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         {/* Destination Input */}
         {isOneWay && (
         <div ref={destinationRef} style={{ position: 'relative', width: '100%' }}>
-            <div className='input-wrapper'>
+            <div className={`input-wrapper ${!validDestination ? 'red-wrapper' : ''}`}>
                 <input type="text"
                     id="destination"
-                    className='input pickup'
+                    className={`input pickup`}
                     value={destinationQuery}
                     onChange={(e) => {
+                        setDestinationID('');
                         setdestinationQuery(e.target.value);
                         setShowDestinationResults(true);
                     }}
@@ -135,14 +171,18 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
             </div>
+            {!validDestination && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid destinations.</div>}
+
             {showDestinationResults && destinationResults.length > 0 && (
                 <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10">
                     {destinationResults.map((place, idx) => (
                         <div
                             key={idx}
                             onClick={() => {
+                                setDestinationID(place.id)
                                 setdestinationQuery(place.name_location);
                                 setShowDestinationResults(false);
+                                setvalidDestination(true);
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
@@ -190,6 +230,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             {getOffer}
         </button>        
         </div>
+        <SuccessModal show={showSuccess} />
     </form>
   )
 }

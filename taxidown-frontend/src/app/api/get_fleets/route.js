@@ -22,12 +22,10 @@ export async function GET() {
         
         if(response.status==200){
             const cookieHeader = response.headers.get('Set-Cookie')
-            const res = NextResponse.json(fleets);
+            const res = NextResponse.json(fleets.results);
             res.headers.set('Set-Cookie', cookieHeader)
             return res
         }
-
-
     }catch(err){
         return NextResponse.json({ message: `Error ${err}` }, { status: status })
     }

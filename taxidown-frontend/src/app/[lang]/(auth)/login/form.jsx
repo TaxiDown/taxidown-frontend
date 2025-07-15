@@ -2,7 +2,6 @@
 import React, { useState, Suspense } from 'react'
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Login from '@/app/actions/login';
 import Link from 'next/link';
 
 
@@ -24,12 +23,11 @@ export default function Loginform({loginTitle, dontHaveAccount, createAccount, f
           body: JSON.stringify({ email: email, password: password }),
         });
         setCode(response.status);
-        console.log(response);
         switch (response.status) {
             case 200 :
               setresponse('Logged in successfully!');
               setTimeout(() => {
-                router.push("/home");
+                router.push("/en");
               }, 5000);
               break;
       

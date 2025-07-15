@@ -16,7 +16,6 @@ export async function GET(request) {
         })
         status = response.status
         const locations =  await response.json();
-        console.log(locations)
         if(response.status==200){
             const res = NextResponse.json(locations);
             return res
