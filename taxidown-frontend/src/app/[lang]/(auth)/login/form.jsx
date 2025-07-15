@@ -44,7 +44,7 @@ export default function Loginform({loginTitle, dontHaveAccount, createAccount, f
               break;
       
             case 500 :
-              setresponse(`You are \nalready logged In!`);
+              setresponse(`Server error`);
               break;
       
             default:
