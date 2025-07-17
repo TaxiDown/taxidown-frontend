@@ -12,6 +12,7 @@
     "getOffer": "Obtener oferta",
     "home": "Inicio",
     "contactUs": "Contáctanos",
+    "logoutTitle": "Cerrar sesión",
     "bookingTitle": "Reservas"
   },
   "auth": {
@@ -24,6 +25,7 @@
     "goToLogin": "Ir a Iniciar sesión",
     "emailVerifiedMessage": "Tu correo electrónico ha sido verificado con éxito. ¡Ahora puedes iniciar sesión en tu cuenta!",
     "loginTitle": "Iniciar sesión",
+    "logoutTitle": "Cerrar sesión",
     "createAccountTitle": "Crea tu cuenta",
     "email": "Correo electrónico",
     "password": "Contraseña",

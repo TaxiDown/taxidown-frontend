@@ -7,6 +7,7 @@ import SuccessModal from './modal';
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer}) {
     const router = useRouter();
     const [showSuccess, setShowSuccess] = useState(false);
+    const [type, setType] = useState('')
     const [pickupDate, setPickupDate] = useState('');
     const [pickupTime, setPickupTime] = useState('');
     const [isOneWay, setIsOneWay] = useState(true);
@@ -22,6 +23,10 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     const [validDestination, setvalidDestination] = useState(true);
     const pickupRef = useRef(null);
     const destinationRef = useRef(null);
+    const now = new Date();
+    now.setHours(now.getHours() + 4);
+    const minDate = now.toISOString().split('T')[0];
+    const minTime = now.toTimeString().slice(0, 5); 
 
     useEffect(() => {
           if (pickupQuery.length < 1 ) {
@@ -77,7 +82,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         e.preventDefault(); 
         if(!pickupID){
             setvalidPickup(false);
-        }else if(!destinationID){
+        }else if(!destinationID && isOneWay){
             setvalidDestination(false);
         }else{
             const datetime_pickup = new Date(`${pickupDate}T${pickupTime}:00`);
@@ -90,14 +95,28 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             if(response.ok){
                 const data = await response.json();
                 console.log(data);
-                router.push('/en/bookings');
-
+                setShowSuccess(true)
+                setType('success');
+                setTimeout(() => {
+                    setShowSuccess(false);
+                    router.push('/en/bookings');
+                }, 4000);
+            }else if (response.status == 429){
+                setShowSuccess(true);
+                setType('limit');
+                setTimeout(() => {
+                    setShowSuccess(false);
+                }, 5000);
             }else if(response.status == 401){
                 router.push("/en/login");
             }
         }
     };   
   return (
+    <>
+    {showSuccess &&
+        <SuccessModal type={type}/>
+    }
     <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-25 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
         <h1 className='text-[40px] truculenta font-medium m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
@@ -111,7 +130,8 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {/* Pickup Input */}
         <div ref={pickupRef} style={{ position: 'relative', width: '100%' }}>
-        <div className={`input-wrapper ${!validPickup ? 'red-wrapper' : ''}`}>                <input type="text"
+        <div className={`input-wrapper ${!validPickup ? 'red-wrapper' : ''}`}>                
+            <input type="text"
                     id="pickup"
                     className='input pickup'
                     value={pickupQuery}
@@ -129,7 +149,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             </div>
             {!validPickup && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid pickup locations.</div>}
             {showpickupResults && pickupResults.length > 0 && (
-                <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10">
+                <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10 max-h-50 overflow-auto">
                     {pickupResults.map((place, idx) => (
                         <div
                             key={idx}
@@ -171,7 +191,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             {!validDestination && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid destinations.</div>}
 
             {showDestinationResults && destinationResults.length > 0 && (
-                <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10">
+                <div className="absolute bg-[#fcfcfa] border border-gray-300 rounded shadow w-full top-[39] z-10 max-h-50 overflow-auto">
                     {destinationResults.map((place, idx) => (
                         <div
                             key={idx}
@@ -201,6 +221,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 id="pickup-date"
                 className="bg-transparent outline-none text-[16px] w-full"
                 value={pickupDate}
+                min={minDate}
                 onChange={(e) => setPickupDate(e.target.value)}
                 required
             />
@@ -216,6 +237,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 className="bg-transparent outline-none text-[16px] w-full"
                 value={pickupTime}
                 onChange={(e) => setPickupTime(e.target.value)}
+                min = {minTime}
                 required
             />
             </div>
@@ -227,7 +249,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             {getOffer}
         </button>        
         </div>
-        <SuccessModal show={showSuccess} />
     </form>
+    </>
   )
 }

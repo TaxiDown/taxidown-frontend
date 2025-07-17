@@ -12,10 +12,12 @@
     "getOffer": "Get Offer",
     "home": "Home",
     "contactUs": "Contact us", 
-    "bookingTitle": "Bookings"
+    "bookingTitle": "Bookings",
+    "logoutTitle": "Logout"
   },
   "auth":{
     "loginTitle": "Login",
+    "logoutTitle": "Logout",
     "createAccountTitle": "Create Your Account",
     "email": "Email",
     "password": "Password",

@@ -12,7 +12,7 @@ export async function RefreshAccessToken(refresh) {
           'Content-Type': 'application/json',
         },
         cache: 'no-store',
-        body: JSON.stringify({ refresh }),
+        body: JSON.stringify({ refresh : refresh }),
       });
   
       if (res.status === 200) {
