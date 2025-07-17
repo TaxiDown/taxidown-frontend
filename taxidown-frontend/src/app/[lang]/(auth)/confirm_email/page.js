@@ -9,7 +9,7 @@ export default function ConfirmEmail() {
 
   const searchParams = useSearchParams();
   const key = searchParams.get('key'); 
-   
+  useEffect(()=>{
   const onSubmit = async () => {
     const response = await fetch ( `/api/confirm_email`,{
       method: 'POST',
@@ -21,7 +21,6 @@ export default function ConfirmEmail() {
     setStatus(response.status)
     return response.status
   }
-  useEffect(()=>{
     onSubmit();
   },[])
 
