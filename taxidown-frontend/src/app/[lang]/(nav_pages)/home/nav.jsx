@@ -1,6 +1,7 @@
 'use client'
 import {React, useState, useEffect} from 'react'
 import Link from 'next/link'
+import LanguageSwitcher from '../switcher';
 
 export default function Navbar({home, contactUs, loginTitle, bookingTitle, logoutTitle, lang, successLogout }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -18,11 +19,9 @@ export default function Navbar({home, contactUs, loginTitle, bookingTitle, logou
           const data = await response.json();
           setLoggedIn(true);
         } else {
-          // Don't throw or log anything here
           setLoggedIn(false);
         }
       } catch (err) {
-        // Only log unexpected errors (like network issues)
         setLoggedIn(false);
       }
     };
@@ -62,18 +61,20 @@ export default function Navbar({home, contactUs, loginTitle, bookingTitle, logou
           <h3 className='text-[22px] font-bold'>TaxiDown</h3>
         </Link>  
         <div className='flex md:gap-10 md:mr-7 gap-5'>
-            <Link href={`/${lang}`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{home}</Link>   
+            <Link href={`/${lang}`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{home}</Link>   
             {
               loggedIn ?
               (
                 <>
-                <Link href={`/${lang}/bookings`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{bookingTitle}</Link>   
+                <Link href={`/${lang}/bookings`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{bookingTitle}</Link>   
                 <button onClick={logout} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105 cursor-pointer'>{logoutTitle}</button>
                 </>            
               )
               :
-              <Link href={`/${lang}/login`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{loginTitle}</Link>
-            }    
+              <Link href={`/${lang}/login`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{loginTitle}</Link>
+            } 
+            <LanguageSwitcher />
+   
         </div>
     </div>
     </>

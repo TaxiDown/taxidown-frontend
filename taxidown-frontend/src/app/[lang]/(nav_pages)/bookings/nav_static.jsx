@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import LanguageSwitcher from '../switcher';
 
 export default function NavbarStatic({ home, contactUs, loginTitle, bookingTitle, logoutTitle, loggedIn, lang }) {
     const [loggedOut, setLogedOut] = useState(false);
@@ -25,7 +26,7 @@ export default function NavbarStatic({ home, contactUs, loginTitle, bookingTitle
     <>{
         loggedOut && 
         <div className="fixed inset-0 top-0 left-0 z-50 flex items-center justify-center bg-black/50 h-full w-screen">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full h-100">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full h-30 flex items-center justify-center">
             <h2 className="text-green-600 text-xl font-semibold mb-2">Logout successful.</h2>
           </div>
         </div>
@@ -35,17 +36,18 @@ export default function NavbarStatic({ home, contactUs, loginTitle, bookingTitle
           <h3 className='text-[22px] font-bold'>TaxiDown</h3>
         </Link> 
         <div className='flex md:gap-10 md:mr-7 gap-5'>
-        <Link href={`/${lang}`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{home}</Link>
+        <Link href={`/${lang}`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{home}</Link>
         {
           loggedIn ? (
             <>
-              <Link href={`/${lang}/bookings`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{bookingTitle}</Link>   
+              <Link href={`/${lang}/bookings`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{bookingTitle}</Link>   
               <button onClick={logout} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{logoutTitle}</button>
             </>
           ) : (
-            <Link href={`/${lang}/login`} className='text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{loginTitle}</Link>
+            <Link href={`/${lang}/login`} className='flex items-center text-yellow-1000 md:text-[19px] text-[17px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'>{loginTitle}</Link>
           )
         }
+        <LanguageSwitcher />
       </div>
     </div>
     </>

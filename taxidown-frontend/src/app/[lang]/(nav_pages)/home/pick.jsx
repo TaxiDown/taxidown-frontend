@@ -291,7 +291,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                         key={fleet.id}
                         onClick={() => setSelectedFleet(fleet.id)}
                         className={`bg-white rounded-xl shadow-lg w-max cursor-pointer transition duration-300
-                          ${selectedFleet === fleet.id ? 'ring-4 ring-black' : 'hover:shadow-2xl'}`}
+                          ${selectedFleet === fleet.id ? 'ring-2 ring-black' : 'hover:shadow-2xl'}`}
                       >
                         <div className="p-3 text-center">
                           <h3 className="text-sm font-medium text-gray-800">
