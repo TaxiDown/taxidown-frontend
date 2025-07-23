@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "install": "next install",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -24,8 +25,5 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4"
-  },
-  "engines": {
-    "node": ">=20"
   }
 }
