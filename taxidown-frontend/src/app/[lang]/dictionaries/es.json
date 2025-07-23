@@ -1,29 +1,28 @@
 {
-"lang": {
-    "loginTitle": "Iniciar sesión",
+  "lang": {
     "appTitle": "TaxiDrive",
-    "pickupTripNow": "¡Reserva tu viaje ahora!",
+    "pickupTripNow": "¡Recoge tu viaje ahora!",
     "oneWay": "Solo ida",
     "perHour": "Por hora",
     "pickupLocation": "Lugar de recogida",
     "destination": "Destino",
+    "loginTitle": "Iniciar sesión",
     "date": "Fecha",
     "time": "Hora",
     "getOffer": "Obtener oferta",
     "home": "Inicio",
     "contactUs": "Contáctanos",
+    "bookingTitle": "Reservas",
     "logoutTitle": "Cerrar sesión",
-    "bookingTitle": "Reservas"
+    "LogoutSuccessful": "Cierre de sesión exitoso."
+  },
+  "ride": {
+    "undetermined": "Precio determinado por llamada",
+    "cancel": "Cancelar",
+    "cancelRide": "Cancelar viaje",
+    "cancelConfirm": "¿Deseas cancelar este viaje?"
   },
   "auth": {
-    "resetPassword": "Restablecer contraseña",
-    "sendResetEmail": "Enviar correo de restablecimiento",
-    "confirmationExpired": "Confirmación caducada",
-    "confirmationExpiredMessage": "El enlace de confirmación ha caducado. Por favor, solicita un nuevo correo de verificación.",
-    "resendConfirmationEmail": "Reenviar correo de confirmación",
-    "emailConfirmed": "Correo confirmado",
-    "goToLogin": "Ir a Iniciar sesión",
-    "emailVerifiedMessage": "Tu correo electrónico ha sido verificado con éxito. ¡Ahora puedes iniciar sesión en tu cuenta!",
     "loginTitle": "Iniciar sesión",
     "logoutTitle": "Cerrar sesión",
     "createAccountTitle": "Crea tu cuenta",
@@ -32,6 +31,87 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "dontHaveAccount": "¿No tienes una cuenta?",
     "createAccount": "Crear cuenta",
-    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "resetPassword": "Restablecer contraseña",
+    "sendResetEmail": "Enviar correo de restablecimiento",
+    "confirmationExpired": "Confirmación expirada",
+    "confirmationExpiredMessage": "El enlace de confirmación ha expirado. Solicita un nuevo correo de verificación.",
+    "resendConfirmationEmail": "Reenviar correo de confirmación",
+    "emailConfirmed": "Correo confirmado",
+    "goToLogin": "Ir a iniciar sesión",
+    "emailVerifiedMessage": "Tu correo ha sido verificado con éxito. ¡Ahora puedes iniciar sesión en tu cuenta!"
+  },
+  "login": {
+    "loginTitle": "Iniciar sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "createAccount": "Crear cuenta"
+  },
+  "signup": {
+    "confirmPassword": "Confirmar contraseña",
+    "continue": "Continuar",
+    "fname": "Nombre",
+    "lname": "Apellido",
+    "phone": "Número de teléfono",
+    "createAccount": "Crear cuenta",
+    "back": "Atrás",
+    "invalidEmail": "Correo inválido",
+    "passwordMismatch": "Las contraseñas deben coincidir",
+    "passwordLength": "Debe tener al menos 8 caracteres",
+    "passwordUpper": "Incluye al menos una mayúscula",
+    "passwordLower": "Incluye al menos una minúscula",
+    "passwordNumber": "Contiene números",
+    "passwordSpecial": "Se requieren caracteres especiales",
+    "success": "¡Inicio de sesión exitoso!",
+    "missingFields": "Faltan campos",
+    "invalidCredentials": "Credenciales inválidas",
+    "notFound": "🚫 API no encontrada (404). Verifica tu ruta.",
+    "serverError": "Error del servidor",
+    "accountSuccessTitle": "¡Cuenta creada exitosamente!",
+    "accountSuccessText": "Ahora puedes solicitar viajes.",
+    "signupTitle": "Registrarse",
+    "createAccountTitle": "Crea tu cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "loginTitle": "Iniciar sesión"
+  },
+  "unauthorized": {
+    "error": "No estás autorizado para ver esta página.",
+    "loginTitle": "Iniciar sesión"
+  },
+  "confirmEmail": {
+    "goLogin": "Ir a iniciar sesión",
+    "confirmed": "Tu correo ha sido verificado con éxito. ¡Ahora puedes iniciar sesión en tu cuenta!",
+    "invalid": "Enlace de confirmación inválido.",
+    "emailConfirmed": "Correo confirmado",
+    "invalidLink": "Enlace inválido"
+  },
+  "confirmPassword": {
+    "reset": "Restablecer contraseña",
+    "email": "Correo electrónico",
+    "invalid": "Correo inválido",
+    "sendReset": "Enviar correo de restablecimiento"
+  },
+  "resetPassword": {
+    "title": "Restablecer contraseña",
+    "passwordLabel": "Contraseña*",
+    "confirmLabel": "Confirmar contraseña*",
+    "submit": "Enviar correo de restablecimiento",
+    "matchError": "Las contraseñas deben coincidir",
+    "validations": {
+      "length": "Debe tener al menos 8 caracteres",
+      "uppercase": "Incluye al menos una mayúscula",
+      "lowercase": "Incluye al menos una minúscula",
+      "number": "Contiene números",
+      "special": "Incluye caracteres especiales"
+    }
+  },
+  "pick": {
+    "estimatedPrice": "Precio estimado",
+    "chooseVehicle": "Elegir vehículo",
+    "createRide": "Crear viaje"
   }
 }

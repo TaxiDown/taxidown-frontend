@@ -13,7 +13,14 @@
     "home": "Home",
     "contactUs": "Contact us", 
     "bookingTitle": "Bookings",
-    "logoutTitle": "Logout"
+    "logoutTitle": "Logout", 
+    "LogoutSuccessful": "Logout successful."
+    
+  },"ride":{
+    "undetermined":"Price Determined on Call",
+    "cancel": "Cancel", 
+    "cancelRide": "Cancel Ride", 
+    "cancelConfirm": "You want to cancel this ride?"
   },
   "auth":{
     "loginTitle": "Login",
@@ -33,5 +40,79 @@
     "emailConfirmed": "Email Confirmed",
     "goToLogin": "Go to Login",
     "emailVerifiedMessage": "Your email has been successfully verified. You can now log In to your account!"
+  }, "login":{
+    "loginTitle": "Login",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create Account"
+  },
+   "signup":{
+    "confirmPassword": "Confirm Password",
+    "continue": "Continue",
+    "fname": "First Name",
+    "lname": "Last Name",
+    "phone": "Phone Number",
+    "createAccount": "Create Account",
+    "back": "Back",
+    "invalidEmail": "Invalid Email",
+    "passwordMismatch": "Passwords must be matched",
+    "passwordLength": "Must be at least 8 characters long",
+    "passwordUpper": "Includes at least one uppercase",
+    "passwordLower": "Includes at least one lowercase",
+    "passwordNumber": "Contains numbers",
+    "passwordSpecial": "Special characters required",
+    "success": "Logged in successfully!",
+    "missingFields": "Missing fields",
+    "invalidCredentials": "Invalid credentials",
+    "notFound": "🚫 API not found (404). Check your route.",
+    "serverError": "Server error",
+    "accountSuccessTitle": "Account Created Successfully!",
+    "accountSuccessText": "You can make rides now.",
+    "signupTitle": "Signup",
+    "createAccountTitle": "Create Your Account",
+    "email": "Email",
+    "password": "Password",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginTitle": "Login"
+  },
+   "unauthorized":{
+    "error": "You are not authorized to view this page.",
+    "loginTitle": "Login"
+  },
+   "confirmEmail":{
+    "goLogin": "Go to Login", 
+    "confirmed" : "Your email has been successfully verified. You can now log In to your account!",
+    "invalid": "Invalid confirmation link.",
+    "emailConfirmed" : "Email Confirmed",
+    "invalidLink" : "Invalid Link"
+  },
+   "confirmPassword":{
+    "reset": "Reset Password",
+    "email": "Email",
+    "invalid": "Invalid Email",
+    "sendReset": "Send Reset Email"
+  },
+   "resetPassword": {
+    "title": "Reset Password",
+    "passwordLabel": "Password*",
+    "confirmLabel": "Confirm Password*",
+    "submit": "Send Reset Email",
+    "matchError": "Passwords must match",
+    "validations": {
+      "length": "Must be at least 8 characters long",
+      "uppercase": "Includes at least one uppercase",
+      "lowercase": "Includes at least one lowercase",
+      "number": "Contains numbers",
+      "special": "Includes special characters"
+    }
+  },
+  "pick":{
+    "estimatedPrice": "Estimated Price",
+    "chooseVehicle": "Choose Vehicle",
+    "createRide": "Create Ride"
+
   }
+
 }

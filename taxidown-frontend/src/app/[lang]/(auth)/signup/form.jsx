@@ -5,7 +5,7 @@ import CreateAccount from '@/app/actions/createAccount';
 import { useRouter } from 'next/navigation';
 
 
-export default function Signupform() {
+export default function Signupform({signup, lang}) {
 
   const userData ={
     email: "",
@@ -67,7 +67,7 @@ export default function Signupform() {
       case 201 :
         setresponse(`Account created successfully! \n You will be redirected to the login page.`);
         setTimeout(() => {
-          router.push("en/login");
+          router.push(`${lang}/login`);
         }, 1000);
         break;
 
@@ -76,7 +76,7 @@ export default function Signupform() {
         break;
 
       case 404 :
-        console.error('🚫 API not found (404). Check your route.');
+    //    console.error('🚫 API not found (404). Check your route.');
         break;
 
       case 500 :
@@ -84,7 +84,7 @@ export default function Signupform() {
         break;
 
       default:
-        console.error(`❓ Unhandled status ${res}`);
+     //   console.error(`❓ Unhandled status ${res}`);
         break;
     }
   };
@@ -136,7 +136,7 @@ return (
               required
           />
           <label htmlFor="email" className="label"
-          >Email*</label>
+          >{signup.email}*</label>
           {!validEmail && <span className='text-center m-auto flex items-center justify-center text-red-600 w-full'>Invalid Email</span>}
 
       </div>
@@ -151,7 +151,7 @@ return (
               required
           />
           <label htmlFor="password" className="label"
-          >Password*</label>
+          >{signup.password}*</label>
           {data.password && 
           <button
           type="button"
@@ -183,7 +183,7 @@ return (
             required
         />
         <label htmlFor="confirmPassword" className="label"
-        >Confirm Password*</label>
+        >{signup.confirmPassword}*</label>
         {confirmationPassword && 
         <button
         type="button"
@@ -200,7 +200,7 @@ return (
       </div>
       }
       <button className={data.password && data.email && data.password == confirmationPassword ? 'mt-2 cursor-pointer bg-black text-white rounded-sm text-[18px] p-6 pt-[11px] pb-[11px] w-30 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black' : 'mt-2 cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[18px] p-6 pt-[11px] pb-[11px]  w-30 border-2 border-[#ccc]'} onClick={nextPage}>
-        Continue
+        {signup.continue}
       </button>
       </>
     || page ==2 &&
@@ -216,7 +216,7 @@ return (
               required
           />
           <label htmlFor="firstname" className="label"
-          >First Name*</label>
+          >{signup.fname}*</label>
       </div>
       
       <div className='input-wrapper'>
@@ -229,7 +229,7 @@ return (
               required
           />
           <label htmlFor="lastname" className="label"
-          >Last Name*</label>
+          >{signup.lname}*</label>
           
       </div>
       <div className='input-wrapper'>
@@ -242,14 +242,14 @@ return (
               required
           />
           <label htmlFor="phone" className="label"
-          >Phone Number*</label>
+          >{signup.phone}*</label>
       </div>
       <div className='mt-3 flex flex-col gap-2 items-center justify-items-center max'>
         <button className={data.firstname && data.lastname && data.phone ? 'cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 w-max transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-max' : 'w-max cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[16px] p-3 w-max border-2 border-[#ccc]'} type='submit'>
-        Create Account
+        {signup.createAccount}
         </button>
         <button className='cursor-pointer bg-[#f5f5f5] text-[#262626] rounded-sm text-[19px] p-5 pt-2 pb-2 w-35 border border-[#ccc] transition-transform duration-300 hover:scale-105 hover:bg-[#e0e0e0] hover:border-[#bbb]' onClick={prevPage}>
-          Back
+          {signup.back}
         </button>
       </div>
       

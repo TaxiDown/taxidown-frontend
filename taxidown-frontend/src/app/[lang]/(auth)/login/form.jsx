@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 
-export default function Loginform({loginTitle, dontHaveAccount, createAccount, forgotPassword, pass, em}) {
+export default function Loginform({loginTitle, dontHaveAccount, createAccount, forgotPassword, pass, em, lang}) {
     const router = useRouter();
     const [code, setCode] = useState(0)
     const [response, setresponse] = useState('')
@@ -27,7 +27,7 @@ export default function Loginform({loginTitle, dontHaveAccount, createAccount, f
             case 200 :
               setresponse('Logged in successfully!');
               setTimeout(() => {
-                router.push("/en");
+                router.push(`/${lang}`);
               }, 5000);
               break;
       
@@ -44,11 +44,10 @@ export default function Loginform({loginTitle, dontHaveAccount, createAccount, f
               break;
       
             case 500 :
-              setresponse(`Server error`);
+              setresponse(`Invalid credentials`);
               break;
       
             default:
-              console.error(`❓ Unhandled status ${response}`);
               break;
           }
     }

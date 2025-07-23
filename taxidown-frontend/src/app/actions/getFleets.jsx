@@ -13,7 +13,6 @@ export default async function GetFlets() {
         
       });
     const fleets = await response.json();
-    console.log(response)
     if (response.status != 200)
         return
     return (

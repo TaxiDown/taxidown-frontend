@@ -1,15 +1,19 @@
-import React from 'react'
-import { MapPinIcon, BanknotesIcon, CheckCircleIcon, CheckBadgeIcon, ClockIcon,} from '@heroicons/react/24/solid'
+import React, { useState } from 'react'
+import { MapPinIcon, BanknotesIcon, CheckCircleIcon, CheckBadgeIcon, ClockIcon} from '@heroicons/react/24/solid'
 import {
     Clock,
     CalendarDaysIcon,
     MapPinX,
     XCircleIcon,
-    LucideDollarSign
+    LucideDollarSign, X
   } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 
-export default function Ride({pickupText, destinationText, pickup, destination, date, time, price, status, vehicle}) {
+export default function Ride({pickupText, destinationText, pickup, destination, date, time, price, status, vehicle, id, ride}) {
+  const router = useRouter();
+
+  const [cancel, setCancel] = useState(false);
   const getStatusColor = () => {
     if (status === 'Completed') return 'text-black-600';
     if (status === 'Canceled') return 'text-red-600';
@@ -19,11 +23,38 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
 
   const getStatusIcon = () => {
     if (status === 'Completed') return <></>;
-    if (status === 'Canceled') return <XCircleIcon className="w-4 h-4 text-red-600" />;
+    if (status === 'Canceled') return <></>;
     if (status === 'Confirmed') return <CheckBadgeIcon className="w-4 h-5 text-green-600" />;
     return <ClockIcon className="w-4 h-5 text-yellow-600" />;
   };
+
+  const cancelRide = async ()=>{
+    const response = await fetch(`/api/cancel_booking`,{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({id: id}),
+    })
+    if(response.status === 200 ){
+      setCancel(false);
+      router.refresh();
+    }else{
+        router.push("/en/unauthorized");
+    }
+  }
   return (
+    <>
+    {
+      cancel &&
+      <div className="fixed inset-0 top-0 left-0 z-50 flex items-center justify-center bg-black/50 h-full w-screen">
+        <div className="relative bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full py-10 flex flex-col items-center justify-center gap-5">
+        <button className='cursor-pointer absolute top-3 right-3' onClick={() => {setCancel(false);}}><X size={20}/></button>
+          <h2 className="text-red-600 text-xl font-semibold mb-2 ">{ride.cancelConfirm}</h2>
+          <button className='text-white bg-red-800 rounded-lg py-2 px-4 flex items-center gap-1 text-md cursor-pointer' onClick={()=>cancelRide()}>
+            {ride.cancelRide}</button>
+        </div>
+      </div> 
+    }
     <div className="flex max-w-5xl mx-auto bg-white rounded-2xl shadow p-10 border border-gray-200 w-[90%]">
       <div className="flex flex-col items-center w-24 relative">
         <div className="text-center mb-2">
@@ -63,18 +94,30 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           </div>
         }
       </div>
-      <div className='flex flex-col justify-between items-left'>
+      <div className='flex flex-col justify-between items-center min-w-max gap-3'>
         <div className='flex items-center gap-1'>
           {getStatusIcon()}
            <p className={`font-semibold text-[17px] ${getStatusColor()}`}>{status}</p>
         </div>
+        {
+          status == "Pending" &&
+          <button className='text-red-600 rounded-lg flex items-center gap-1 text-lg cursor-pointer font-semibold' onClick={()=>setCancel(true)}>
+            <XCircleIcon className="w-4 h-4 text-red-600 font-semibold" />
+            {ride.cancel}</button>
+        }
+        
         <div className='flex items-center'>
             <LucideDollarSign size={25} className=" text-green-900 w-4" />
-            <p>{price}</p>
+            {price ?
+              <p>{price}</p>
+            : <>
+              <p>{ride.undetermined}</p>
+              </>
+            }
         </div>
       </div>
 
     </div>
-
+    </>
   )
 }

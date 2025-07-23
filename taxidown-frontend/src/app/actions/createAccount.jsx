@@ -17,7 +17,6 @@ export default async function CreateAccount({email, password, password2, firstna
         'Content-Type': 'application/json',
       },
     });
-      console.log(await res.json());
       return res.status;
   }
   catch (err) {

@@ -4,9 +4,8 @@ import { cookies } from "next/headers"
 
 
 export async function POST() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
-  // Create cookie header string for fetch
   const cookieHeader = cookieStore.getAll()
     .map(cookie => `${cookie.name}=${cookie.value}`)
     .join('; ');
