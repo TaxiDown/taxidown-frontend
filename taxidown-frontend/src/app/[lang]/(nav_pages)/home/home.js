@@ -13,7 +13,7 @@ export default async function HomePage({params}) {
     <div className=' w-[100vw]'>
         <Navbar home={dict.lang.home} contactUs={dict.lang.contactUs} loginTitle={dict.lang.loginTitle} bookingTitle={dict.lang.bookingTitle} logoutTitle={dict.lang.logoutTitle} successLogout={dict.lang.LogoutSuccessful} lang={lang}/>
         <div className='w-full md:h-screen h-[650px] bg-[url(/home2.png)] bg-cover relative bg-center flex items-center justify-center md:flex-none'>
-            <Pick pick={dict.lang.pickupTripNow} oneWay={dict.lang.oneWay} perHour={dict.lang.perHour} pickupLocation={dict.lang.pickupLocation} destination={dict.lang.destination} getOffer={dict.lang.getOffer} login={dict.login} signup={dict.signup} pickdict={dict.pick}/>
+            <Pick pick={dict.lang.pickupTripNow} oneWay={dict.lang.oneWay} perHour={dict.lang.perHour} pickupLocation={dict.lang.pickupLocation} destination={dict.lang.destination} getOffer={dict.lang.getOffer} login={dict.login} signup={dict.signup} pickdict={dict.pick} lang={lang}/>
         </div>
 
         <OurServices />
