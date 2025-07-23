@@ -5,7 +5,7 @@ import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 import PickLogin from './pick_login';
 
-export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer, login, signup, pickdict}) {
+export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer, login, signup, pickdict, lang}) {
     const [IsLogin, setLogin] = useState(false);
     const router = useRouter();
     const [showSuccess, setShowSuccess] = useState(false);
@@ -100,7 +100,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             setType('success');
             setTimeout(() => {
                 setShowSuccess(false);
-                router.push('/en/bookings');
+                router.push(`/${lang}/bookings`);
             }, 4000);
         }else if (response.status == 429){
             setShowSuccess(true);
@@ -113,22 +113,39 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         }
     
     }; 
-    const estimatePrice = async(e)=>{
+
+    const estimatePrice = async (e) => {
         e.preventDefault();
-        const res = fetch(`/api/get_price`,{
-            cache: "no-store",
-            method: 'POST',
-            body: JSON.stringify({ pickup_location: pickupQuery, dropoff_location: destinationQuery, datetime_pickup: `${pickupDate}T${pickupTime}:00`, id_vehicle_category : selectedFleet}),
-            headers: {
-            'Content-Type': 'application/json',
-            },
-        });
-        if(res.ok){
-            const data = await response.json();
-            setGetPrice(true);
-            setEstimatedPrice(data.results.price);
+    
+        try {
+            const res = await fetch(`/api/get_price`, {
+                cache: "no-store",
+                method: 'POST',
+                body: JSON.stringify({
+                    pickup_location: pickupQuery,
+                    dropoff_location: destinationQuery,
+                    datetime_pickup: `${pickupDate}T${pickupTime}:00`,
+                    id_vehicle_category: selectedFleet,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (res.status === 200) {
+                const data = await res.json();
+                setGetPrice(true);
+                setEstimatedPrice(data.price);
+                console.log(data.price);
+            } else {
+                const errorData = await res.json();
+                console.error('Error estimating price:', errorData);
+            }
+        } catch (err) {
+            console.error('Request failed:', err);
         }
-    } 
+    };
+    
     
     useEffect(()=>{
         const fetchData = async()=>{
@@ -155,8 +172,8 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         showSuccess &&
         <SuccessModal type={type}/>
     }
-    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-16 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
-        <h1 className='text-[40px] truculenta font-medium m-6'>{pick}</h1>
+    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-16 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
+        <h1 className='text-[40px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
             <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>setIsOneWay(true)}>
                 <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
@@ -281,8 +298,8 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {
             Array.isArray(fleets) && fleets.length > 0 && (
-                <div className="w-full px-4 mt-3">
-                  <h2 className="text-lg font-semibold text-center text-black mb-3">
+                <div className="w-full px-4 mt-2">
+                  <h2 className="text-lg font-semibold text-center text-black mb-1">
                     {pickdict.chooseVehicle}
                   </h2>
                   <div className="flex flex-wrap justify-center gap-6">
@@ -311,7 +328,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </button>
         :
         <>
-        <p className="my-2 font-bold text-green-900"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
+        <p className="my-3 font-bold text-green-900 text-lg"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
         <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] min-w-max' type='submit'>
             {pickdict.createRide}
         </button>

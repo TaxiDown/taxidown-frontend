@@ -6,7 +6,7 @@ import { RefreshAccessToken } from '@/app/actions/validate_token';
 export async function POST(request) {
     const body = await request.json();
     let status = null;
-    
+
     try{
         const res = await fetch(`${process.env.API_URL}api/trips/bookings/get-pricing/`,{
             cache: "no-store",
@@ -17,12 +17,13 @@ export async function POST(request) {
             },
         });
         status = res.status
-        if (res.status==200){
-            const response = NextResponse.json(res.results);
+        if (res.status == 200){
+            const price = await res.json(); 
+            const response = NextResponse.json(price);
             return response
         }else 
             return NextResponse.json({ message: 'error' }, { status: status })
     }catch(err){
-        return NextResponse.json({ message: err }, { status: status })
+        return NextResponse.json({ message: err }, { status: 500})
     }    
 }
