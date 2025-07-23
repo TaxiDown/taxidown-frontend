@@ -67,7 +67,7 @@ export default function Signupform({signup, lang}) {
       case 201 :
         setresponse(`Account created successfully! \n You will be redirected to the login page.`);
         setTimeout(() => {
-          router.push(`${lang}/login`);
+          router.push(`/${lang}/login`);
         }, 1000);
         break;
 

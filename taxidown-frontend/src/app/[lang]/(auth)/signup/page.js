@@ -5,8 +5,9 @@ import { getDictionary } from '../../dictionaries.js'
 
 
 export default async function SignupPage({params}) {
-  const { lang } = await params
-  const dict = await getDictionary(lang)
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+  console.log(lang);
    
   return (
     <div className='flex items-center h-screen w-screen justify-between '>
