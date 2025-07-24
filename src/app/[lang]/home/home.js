@@ -2,7 +2,7 @@ import Navbar from './nav'
 import Footer from './footer'
 import GetFleets from './getfleets'
 import Pick from './pick'
-import { getDictionary } from '../../dictionaries'
+import { getDictionary } from '../dictionaries'
 import OurServices from './ourServices'
 import DriverProfessionals from './drivers'
 

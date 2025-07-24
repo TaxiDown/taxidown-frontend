@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import Loginform from '../../(auth)/login/form';
+import Loginform from '../(auth)/login/form';
 import Link from 'next/link';
-import Signupform from '../../(auth)/signup/form';
+import Signupform from '../(auth)/signup/form';
 import SignupLogin from './form';
 import {X} from "lucide-react";
 

@@ -1,6 +1,6 @@
 'use server'
 import React from 'react'
-import Fleet from '../[lang]/(nav_pages)/home/fleet';
+import Fleet from '../[lang]/home/fleet';
 
 export default async function GetFlets() {
     const response = await fetch(`${process.env.API_URL}api/vehicles/vehicle-categories/`, {

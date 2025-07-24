@@ -1,5 +1,5 @@
 import React from 'react'
-import { getDictionary } from '../../dictionaries'
+import { getDictionary } from '../dictionaries'
 import BookingForm from './form'
 
 export default async function Booking({params}) {
