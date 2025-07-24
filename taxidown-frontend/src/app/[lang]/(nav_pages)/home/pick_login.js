@@ -6,7 +6,7 @@ import Signupform from '../../(auth)/signup/form';
 import SignupLogin from './form';
 import {X} from "lucide-react";
 
-export default function PickLogin({ login, signup, closeModal }) {
+export default function PickLogin({ login, signup, closeModal, lang }) {
   const [isLogin, setLogin] = useState(false);
   const [isSignup, setSignup] = useState(false);
 
@@ -27,15 +27,19 @@ export default function PickLogin({ login, signup, closeModal }) {
                 setSignup(false);
                 closeModal();
               }}
+
             />
             <div className="text-[13px] mt-2">
               {login.dontHaveAccount}{' '}
-              <Link
-                href="/en/signup"
+              <button
+                onClick={()=>{
+                  setSignup(true);
+                  setLogin(false);
+                }}
                 className="text-yellow-500 hover:text-yellow-600"
               >
                 {login.createAccount}
-              </Link>
+              </button>
             </div>
           </div>
         ) : isSignup ? (
@@ -51,12 +55,15 @@ export default function PickLogin({ login, signup, closeModal }) {
               }}/>
             <div className="text-[13px] mt-2">
               {signup.alreadyHaveAccount}{' '}
-              <Link
-                href="/en/signup"
+              <button
+                onClick={()=>{
+                  setSignup(false);
+                  setLogin(true);
+                }}
                 className="text-yellow-500 hover:text-yellow-600"
               >
                 {signup.loginTitle}
-              </Link>
+              </button>
             </div>
           </div>
         ) : (

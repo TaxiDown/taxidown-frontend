@@ -8,7 +8,8 @@ export async function POST(request) {
     const cookieStore = await cookies();
     let access = cookieStore.get('access')?.value;
     let refresh = cookieStore.get('refresh')?.value;
-    let cookieHeader = `${access && `access=${access};`} refresh=${refresh}`;
+    const cookieHeader = `${access && `access=${access};`} refresh=${refresh}`;
+    let cookieHeader2 = undefined;
 
     if (!access && refresh) {
         const result = await RefreshAccessToken(refresh);
@@ -16,7 +17,7 @@ export async function POST(request) {
         refresh = result.refresh;
     
         if (result.status === 200 && access) {
-          cookieHeader = result.setCookie;
+          cookieHeader2 = result.setCookie;
         } else {
           return NextResponse.json({ message: 'Unauthorized' }, { status : 401 });
         }
@@ -26,13 +27,15 @@ export async function POST(request) {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
-                    'Cookie': cookieHeader,
+                    'Cookie': cookieHeader2 ? cookieHeader2 : cookieHeader,
                 },
                 body: JSON.stringify(body),
             });
             if(response.ok){
                 const res = NextResponse.json({status : 200 });
-                res.headers.set('Set-Cookie', cookieHeader)
+                if (cookieHeader2){
+                    res.headers.set('Set-Cookie', cookieHeader2)
+                }
                 return res
             }
             return NextResponse.json({status: response.status})

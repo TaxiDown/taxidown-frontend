@@ -111,7 +111,8 @@
   "pick":{
     "estimatedPrice": "Estimated Price",
     "chooseVehicle": "Choose Vehicle",
-    "createRide": "Create Ride"
+    "createRide": "Create Ride",
+    "undetermined":"Price will be Determined on Call"
 
   }
 

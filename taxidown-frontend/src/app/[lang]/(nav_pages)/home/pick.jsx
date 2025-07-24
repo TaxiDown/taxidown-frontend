@@ -33,6 +33,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     const [getPrice, setGetPrice] = useState(false);
     const [estimatedPrice, setEstimatedPrice] = useState("");
     const [selectedFleet, setSelectedFleet] = useState(null);
+    const [error, setError] = useState('')
 
 
     useEffect(() => {
@@ -116,7 +117,17 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
     const estimatePrice = async (e) => {
         e.preventDefault();
-    
+        if (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleet) {
+            setError('Please fill in all fields.');
+            return;
+        }
+        const pickupDateTime = new Date(`${pickupDate}T${pickupTime}:00`);
+        if (now > pickupDateTime){ 
+            setError('Please choose a date after now, at least 4 hours.');
+            return;
+        }
+
+
         try {
             const res = await fetch(`/api/get_price`, {
                 cache: "no-store",
@@ -136,13 +147,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 const data = await res.json();
                 setGetPrice(true);
                 setEstimatedPrice(data.price);
-                console.log(data.price);
             } else {
-                const errorData = await res.json();
-                console.error('Error estimating price:', errorData);
+                setGetPrice(true);
+                setEstimatedPrice(pickdict.undetermined);
             }
         } catch (err) {
-            console.error('Request failed:', err);
+            setError('Failed to get price estimate. Please try again.');
         }
     };
     
@@ -166,7 +176,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     <>
     {
         IsLogin &&
-        <PickLogin login = {login} signup={signup} closeModal={()=>setLogin(false)}/>
+        <PickLogin login = {login} signup={signup} lang={lang} closeModal={()=>setLogin(false)}/>
     }
     {
         showSuccess &&
@@ -193,10 +203,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                         setPickupID('')
                         setpickupQuery(e.target.value);
                         setShowpickupResults(true);
+                        setError('');
+                        setGetPrice(false);
                     }}
                     required
                 />
-                <label htmlFor="pickup" className="label">{pickupLocation}</label>
+                <label htmlFor="pickup" className="label">{pickupLocation}*</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -233,10 +245,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                         setDestinationID('');
                         setdestinationQuery(e.target.value);
                         setShowDestinationResults(true);
+                        setError('');
+                        setGetPrice(false);
                     }}
                     required
                 />
-                <label htmlFor="destination" className="label">{destination}</label>
+                <label htmlFor="destination" className="label">{destination}*</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -275,7 +289,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 className="bg-transparent outline-none text-[16px] w-full"
                 value={pickupDate}
                 min={minDate}
-                onChange={(e) => setPickupDate(e.target.value)}
+                onChange={(e) => {
+                    setPickupDate(e.target.value);
+                    setError('');
+                    setGetPrice(false);
+                }
+                }
                 required
             />
             </div>
@@ -289,7 +308,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 id="pickup-time"
                 className="bg-transparent outline-none text-[16px] w-full"
                 value={pickupTime}
-                onChange={(e) => setPickupTime(e.target.value)}
+                onChange={(e) => {
+                    setPickupTime(e.target.value)
+                    setError('');
+                    setGetPrice(false);
+                }}
                 required
             />
             </div>
@@ -300,13 +323,17 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             Array.isArray(fleets) && fleets.length > 0 && (
                 <div className="w-full px-4 mt-2">
                   <h2 className="text-lg font-semibold text-center text-black mb-1">
-                    {pickdict.chooseVehicle}
+                    {pickdict.chooseVehicle}*
                   </h2>
                   <div className="flex flex-wrap justify-center gap-6">
                     {fleets.map((fleet) => (
                       <div
                         key={fleet.id}
-                        onClick={() => setSelectedFleet(fleet.id)}
+                        onClick={() => {
+                            setSelectedFleet(fleet.id);
+                            setError('');
+                            setGetPrice(false);
+                        }}
                         className={`bg-white rounded-xl shadow-lg w-max cursor-pointer transition duration-300
                           ${selectedFleet === fleet.id ? 'ring-2 ring-black' : 'hover:shadow-2xl'}`}
                       >
@@ -321,7 +348,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 </div>
             )
         }
-
+        
         {!getPrice ?
         <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-4 min-w-max' onClick={estimatePrice}>
             {getOffer}
@@ -334,7 +361,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </button>
         </>
         }
-                
+        {error && 
+        <>
+        <p className="mt-3 font-bold text-red-600 text-lg"> {error}</p>
+        </>
+        }      
         </div>
     </form>
     </>
