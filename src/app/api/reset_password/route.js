@@ -6,7 +6,7 @@ export async function POST(request) {
     const body = await request.json();
     let status = null;
   try{
-    const response = await fetch(`http://127.0.0.1:8000/api/auth/password/reset/confirm`,{
+    const response = await fetch(`${process.env.API_URL}api/auth/password/reset/confirm`,{
         method: 'POST',
         headers:{
             'Content-Type': 'application/json',

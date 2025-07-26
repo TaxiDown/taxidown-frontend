@@ -4,6 +4,8 @@ import { MapPinIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid'
 import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 import PickLogin from './pick_login';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer, login, signup, pickdict, lang}) {
     const [IsLogin, setLogin] = useState(false);
@@ -32,9 +34,27 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     const minTime = now.toTimeString().slice(0, 5); 
     const [getPrice, setGetPrice] = useState(false);
     const [estimatedPrice, setEstimatedPrice] = useState("");
+    const [selectedFleetID, setSelectedFleetID] = useState(null);
     const [selectedFleet, setSelectedFleet] = useState(null);
     const [error, setError] = useState('')
 
+
+    const handleChange = (fleetId) => {
+        console.log(fleetId.key)
+        setSelectedFleet(fleetId)
+        setError("")
+        setGetPrice(false)
+        }
+    const [selectedFleetValue, setSelectedFleetValue] = useState(undefined)
+
+    const handleValueChange = (value) => {
+        setSelectedFleetValue(value)
+        const selectedFleet = fleets.find((fleet) => fleet.name_category === value)
+        if (selectedFleet) {
+            console.log("Selected Fleet ID:", selectedFleet.id)
+            setSelectedFleetID(selectedFleet.id)
+        }
+        }
 
     useEffect(() => {
           if (pickupQuery.length < 1 ) {
@@ -93,7 +113,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({ pickup_location: pickupQuery, dropoff_location: destinationQuery, datetime_pickup: `${pickupDate}T${pickupTime}:00`, id_vehicle_category: selectedFleet}),
+            body: JSON.stringify({ pickup_location: pickupQuery, dropoff_location: destinationQuery, datetime_pickup: `${pickupDate}T${pickupTime}:00`, id_vehicle_category: selectedFleetID}),
         })
         if(response.ok){
             const data = await response.json();
@@ -117,7 +137,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
     const estimatePrice = async (e) => {
         e.preventDefault();
-        if (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleet) {
+        if (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleetID) {
             setError('Please fill in all fields.');
             return;
         }
@@ -136,7 +156,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     pickup_location: pickupQuery,
                     dropoff_location: destinationQuery,
                     datetime_pickup: `${pickupDate}T${pickupTime}:00`,
-                    id_vehicle_category: selectedFleet,
+                    id_vehicle_category: selectedFleetID,
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,14 +196,14 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     <>
     {
         IsLogin &&
-        <PickLogin login = {login} signup={signup} lang={lang} closeModal={()=>setLogin(false)}/>
+        <PickLogin login = {login} signup={signup} lang={lang} closeModal={()=>setLogin(false)} submit={handleSubmit}/>
     }
     {
         showSuccess &&
         <SuccessModal type={type}/>
     }
-    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:inset-y-16 md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
-        <h1 className='text-[40px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
+    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[4vh] xl:top-[10%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
+        <h1 className='md:text-[38px] text-[30px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
             <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>setIsOneWay(true)}>
                 <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
@@ -282,7 +302,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         <div className='flex space-x-4'>
         {/* Date Picker */}
         <div className='flex flex-col bg-white rounded-md'>
-            <div className={`flex items-center border ${pickupDate ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-48 focus-within:border-black`}>
+            <div className={`flex items-center border ${pickupDate ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-40 focus-within:border-black`}>
             <input
                 type="date"
                 id="pickup-date"
@@ -302,7 +322,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {/* Time Picker */}
         <div className='flex flex-col bg-white rounded-md'>
-            <div className={`flex items-center border ${pickupTime ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-48 focus-within:border-black `}>
+            <div className={`flex items-center border ${pickupTime ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-40 focus-within:border-black `}>
             <input
                 type="time"
                 id="pickup-time"
@@ -321,31 +341,31 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {
             Array.isArray(fleets) && fleets.length > 0 && (
-                <div className="w-full px-4 mt-2">
-                  <h2 className="text-lg font-semibold text-center text-black mb-1">
-                    {pickdict.chooseVehicle}*
-                  </h2>
-                  <div className="flex flex-wrap justify-center gap-6">
-                    {fleets.map((fleet) => (
-                      <div
-                        key={fleet.id}
-                        onClick={() => {
-                            setSelectedFleet(fleet.id);
-                            setError('');
-                            setGetPrice(false);
-                        }}
-                        className={`bg-white rounded-xl shadow-lg w-max cursor-pointer transition duration-300
-                          ${selectedFleet === fleet.id ? 'ring-2 ring-black' : 'hover:shadow-2xl'}`}
-                      >
-                        <div className="p-3 text-center">
-                          <h3 className="text-sm font-medium text-gray-800">
-                            {fleet.name_category}
-                          </h3>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="w-full mt-4 text-black text-lg">
+                    <Select onValueChange={handleValueChange} value={selectedFleetValue}>
+                    <SelectTrigger className="w-full h-14 bg-white border-gray-200 focus-within:border-black text-2xl font-semibold ">
+                        <SelectValue className="text-gray-200" placeholder="Choose vehicle type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {fleets.map((fleet) => (
+                        <SelectItem key={fleet.id} value={fleet.name_category}>
+                            <div className="flex items-center gap-2 text-lg font-semibold">
+                            {fleet.image && (
+                                <img
+                                src={fleet.image || "/placeholder.svg?height=24&width=24&text=Image"}
+                                alt={fleet.name_category}
+                                className="w-6 h-6 object-cover rounded"
+                                onError={(e) => (e.currentTarget.style.display = "none")}
+                                />
+                            )}
+                            <span>{fleet.name_category}</span>
+                            </div>
+                        </SelectItem>
+                        ))}
+                    </SelectContent>
+                    </Select>
                 </div>
+                
             )
         }
         

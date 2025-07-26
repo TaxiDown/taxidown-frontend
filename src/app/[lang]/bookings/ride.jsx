@@ -7,11 +7,12 @@ import {
     XCircleIcon,
     LucideDollarSign, X
   } from "lucide-react";
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'; // For the three dots icon
 import { useRouter } from 'next/navigation';
 
 
 export default function Ride({pickupText, destinationText, pickup, destination, date, time, price, status, vehicle, id, ride}) {
-  const router = useRouter();
+  const [showCancel, setShowCancel] = useState(false);
 
   const [cancel, setCancel] = useState(false);
   const getStatusColor = () => {
@@ -37,7 +38,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
     })
     if(response.status === 200 ){
       setCancel(false);
-      router.refresh();
+      window.location.reload();
     }else{
         router.push("/en/unauthorized");
     }
@@ -94,17 +95,40 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           </div>
         }
       </div>
-      <div className='flex flex-col justify-between items-center min-w-max gap-3'>
+      <div className='relative flex flex-col justify-between items-center min-w-max gap-3'>
+      {
+          status == "Pending" &&
+          <div className="absolute top-0 right-[-15] inline-block text-left m-[-10px]">
+          {/* Three dots icon */}
+          <button
+            onClick={() => setShowCancel(!showCancel)}
+            className="text-gray-600 hover:text-black"
+          >
+            <EllipsisVerticalIcon className="w-6 h-6" />
+          </button>
+
+          {/* Cancel button shown conditionally */}
+          {showCancel && (
+            <div className="absolute mt-2 ml-[-10px] bg-white border border-black py-1 px-2 rounded-lg">
+              <button
+                className="text-red-600 rounded-lg flex items-center gap-1 text-lg cursor-pointer font-semibold"
+                onClick={() => {
+                  setCancel(true);
+                  setShowCancel(false); // Optionally hide after clicking
+                }}
+              >
+                <XCircleIcon className="w-4 h-4 text-red-600 font-semibold " />
+                {ride.cancel || 'Cancel'}
+              </button>
+            </div>
+          )}
+        </div>
+        }
         <div className='flex items-center gap-1'>
           {getStatusIcon()}
            <p className={`font-semibold text-[17px] ${getStatusColor()}`}>{status}</p>
         </div>
-        {
-          status == "Pending" &&
-          <button className='text-red-600 rounded-lg flex items-center gap-1 text-lg cursor-pointer font-semibold' onClick={()=>setCancel(true)}>
-            <XCircleIcon className="w-4 h-4 text-red-600 font-semibold" />
-            {ride.cancel}</button>
-        }
+        
         
         <div className='flex items-center'>
             <LucideDollarSign size={25} className=" text-green-900 w-4" />

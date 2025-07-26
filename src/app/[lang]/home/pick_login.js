@@ -6,7 +6,7 @@ import Signupform from '../(auth)/signup/form';
 import SignupLogin from './form';
 import {X} from "lucide-react";
 
-export default function PickLogin({ login, signup, closeModal, lang }) {
+export default function PickLogin({ login, signup, closeModal, lang, submit }) {
   const [isLogin, setLogin] = useState(false);
   const [isSignup, setSignup] = useState(false);
 
@@ -27,7 +27,7 @@ export default function PickLogin({ login, signup, closeModal, lang }) {
                 setSignup(false);
                 closeModal();
               }}
-
+              submit = {submit}
             />
             <div className="text-[13px] mt-2">
               {login.dontHaveAccount}{' '}
@@ -52,7 +52,9 @@ export default function PickLogin({ login, signup, closeModal, lang }) {
                 setLogin(false);
                 setSignup(false);
                 closeModal();
-              }}/>
+              }}
+              submit = {submit}
+              />
             <div className="text-[13px] mt-2">
               {signup.alreadyHaveAccount}{' '}
               <button
