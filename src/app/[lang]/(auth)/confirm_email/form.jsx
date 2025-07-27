@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function ConfirmClient({ lang, dict }) {
   const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
@@ -20,12 +21,24 @@ export default function ConfirmClient({ lang, dict }) {
       });
       setStatus(response.status.toString());
     };
+    setIsLoading(false)
     if (key) onSubmit();
   }, [key]);
 
   const handleRedirect = () => {
     router.push(`/${lang}/login`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-stone-100">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 border-4 border-yellow-200 border-t-yellow-600 rounded-full animate-spin"></div>
+          <p className="text-black font-lg text-3xl">Loading ...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -65,7 +78,7 @@ export default function ConfirmClient({ lang, dict }) {
             onClick={handleRedirect}
             className="mt-5 px-5 py-3 bg-black text-lg text-white rounded transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black cursor-pointer"
           >
-            {dict.invalid}
+            {dict.goLogin}
           </button>
         )}
       </div>

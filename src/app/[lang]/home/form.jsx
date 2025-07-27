@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function SignupLogin({ signup, onSuccess }) {
+export default function SignupLogin({ signup, onSuccess, submit }) {
   const userData = {
     email: "",
     password: "",
@@ -95,7 +95,9 @@ export default function SignupLogin({ signup, onSuccess }) {
 
     setresponse(messages[response.status] || '');
     if (response.status === 200) {
-      setTimeout(() => onSuccess(), 7000);
+      onSuccess()
+      const fakeEvent = { preventDefault: () => {} };
+      submit(fakeEvent);
     }
   };
 
@@ -149,7 +151,7 @@ export default function SignupLogin({ signup, onSuccess }) {
                 </ul>
               )
             ) : (
-              <div className="input-wrapper">
+              <div className="input-wrapper flex flex-col">
                 <input type={showPassword ? 'text' : 'password'} name="confirmpassword" onChange={confirmPassword} value={confirmationPassword} id="confirmPassword" className="input" required />
                 <label htmlFor="confirmPassword" className="label">{signup.confirmPassword}*</label>
                 {confirmationPassword && (
@@ -158,7 +160,7 @@ export default function SignupLogin({ signup, onSuccess }) {
                   </button>
                 )}
                 {data.password !== confirmationPassword && confirmationPassword && (
-                  <span className="red">{signup.passwordMismatch}</span>
+                  <div className="red">{signup.passwordMismatch}</div>
                 )}
               </div>
             )}

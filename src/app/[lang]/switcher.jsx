@@ -69,18 +69,18 @@ export default function LanguageSwitcher() {
   return (
     <div className="relative inline-block" ref={dropdownRef}>
       <button
-        className="text-black flex items-center gap-2 px-3 py-2 bg-transperent border border-black rounded-lg cursor-pointer text-lg font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:bg-white h-[37px]"
+        className="text-black flex items-center gap-1 md:gap-2 md:px-3 md:py-2 px-1 py-0 bg-transperent border border-black rounded-lg cursor-pointer text-sm md:text-lg font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:bg-white md:h-[37px] h-[30px]"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <svg className="w-4 h-4 stroke-2" viewBox="0 0 24 24" fill="none" stroke="black">
+        <svg className="md:w-4 md:h-4 w-3 h-3 stroke-2" viewBox="0 0 24 24" fill="none" stroke="black">
           <circle cx="12" cy="12" r="10" />
           <line x1="2" y1="12" x2="22" y2="12" />
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>
         <span className="flex items-center gap-1.5">
-          <div className="text-black text-lg ">{currentLanguage.flag}</div>
+          <div className="text-black ">{currentLanguage.flag}</div>
         </span>
         <svg
           className={`w-4 h-4 stroke-3 opacity-50 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`}

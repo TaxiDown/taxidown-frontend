@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 
-export default function Loginform({loginTitle, dontHaveAccount, createAccount, forgotPassword, pass, em, lang, onSuccess}) {
+export default function Loginform({loginTitle, dontHaveAccount, createAccount, forgotPassword, pass, em, lang, onSuccess, submit}) {
     const router = useRouter();
     const [code, setCode] = useState(0)
     const [response, setresponse] = useState('')
@@ -25,14 +25,18 @@ export default function Loginform({loginTitle, dontHaveAccount, createAccount, f
         setCode(response.status);
         switch (response.status) {
             case 200 :
-              setresponse('Logged in successfully!');
-
-              setTimeout(() => {
-                if(onSuccess)
-                  onSuccess();
-                else
-                  router.push(`/${lang}`);
+              if(onSuccess){
+                onSuccess();
+                const fakeEvent = { preventDefault: () => {} };
+                submit(fakeEvent);
+              }
+              else{
+                setTimeout(() => {
+                setresponse('Logged in successfully!');
+                router.push(`/${lang}`);
               }, 3000);
+              } 
+              
               break;
       
             case 401 :

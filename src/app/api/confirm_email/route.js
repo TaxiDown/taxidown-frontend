@@ -8,7 +8,7 @@ export async function POST(request) {
     let status = null;
 
   try{
-    const response = await fetch(`http://127.0.0.1:8000/api/auth/registration/verify-email/`,{
+    const response = await fetch(`${process.env.API_URL}api/auth/registration/verify-email/`,{
         method: 'POST',
         headers:{
             'Content-Type': 'application/json',
