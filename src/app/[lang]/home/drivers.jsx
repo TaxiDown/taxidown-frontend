@@ -19,7 +19,7 @@ export default function DriverProfessionals({ path, title, content, flip }) {
         duration: 0.6,
         ease: "easeInOut",
       }}
-      className="py-5 bg-white md:w-[90%] rounded-2xl shadow-custom"
+      className="py-5 bg-white md:w-[90%] max-w-[95%] rounded-2xl shadow-custom"
     >
       <div
         className={`container mx-auto px-4 flex flex-col md:flex-row items-center gap-12 ${flip}`}

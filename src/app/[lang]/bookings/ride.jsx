@@ -19,7 +19,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
     if (status === 'Completed') return 'text-black-600';
     if (status === 'Canceled') return 'text-red-600';
     if (status === 'Confirmed') return 'text-green-600';
-    return 'text-yellow-600'; // Pending or others
+    return 'text-yellow-600'; 
   };
 
   const getStatusIcon = () => {
@@ -109,7 +109,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
 
           {/* Cancel button shown conditionally */}
           {showCancel && (
-            <div className="absolute mt-2 ml-[-10px] bg-white border border-black py-1 px-2 rounded-lg">
+            <div className="absolute mt-2 top-0 right-5 bg-white border border-black py-1 px-2 rounded-lg">
               <button
                 className="text-red-600 rounded-lg flex items-center gap-1 text-lg cursor-pointer font-semibold"
                 onClick={() => {

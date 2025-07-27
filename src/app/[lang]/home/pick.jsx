@@ -137,7 +137,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
     const estimatePrice = async (e) => {
         e.preventDefault();
-        if (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleetID) {
+        if (!oneWay && (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleetID)) {
+            console.log("lalaaaaaaaaaa")
+            setError('Please fill in all fields.');
+            return;
+        }else if(oneWay && (!pickupQuery || !pickupDate || !pickupTime || !selectedFleetID)){
             setError('Please fill in all fields.');
             return;
         }
@@ -205,9 +209,16 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[4vh] xl:top-[10%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
         <h1 className='md:text-[38px] text-[30px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
         <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
-            <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>setIsOneWay(true)}>
+            <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>{setIsOneWay(true);
+                setGetPrice(false);
+                setEstimatedPrice("");
+            }}>
                 <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
-            <button type="button" className={`w-40 text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>setIsOneWay(false)}>
+            <button type="button" className={`w-40 text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>{
+                setIsOneWay(false);
+                setGetPrice(false);
+                setEstimatedPrice("");
+            }}>
                 <ClockIcon className={`w-6 h-6 ${isOneWay ? 'text-black' : 'text-white'} `} />
                 {perHour}</button>
         </div>
@@ -375,7 +386,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </button>
         :
         <>
-        <p className="my-3 font-bold text-green-900 text-lg"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
+        <p className="my-3 font-bold text-green-900 text-md"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
         <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] min-w-max' type='submit'>
             {pickdict.createRide}
         </button>
