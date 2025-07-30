@@ -1,6 +1,7 @@
 'use client'
 import {React, useEffect, useState, useRef} from 'react'
 import { MapPinIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid'
+import { Calendar, Clock } from "lucide-react"
 import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 import PickLogin from './pick_login';
@@ -8,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer, login, signup, pickdict, lang}) {
+    const [isLoading, setIsLoading] = useState(true)
     const [IsLogin, setLogin] = useState(false);
     const router = useRouter();
     const [showSuccess, setShowSuccess] = useState(false);
@@ -180,22 +182,44 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         }
     };
     
-    
-    useEffect(()=>{
-        const fetchData = async()=>{
-            const response = await fetch(`/api/get_fleets`,{
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-            })
-            if(response.ok){
-                const data = await response.json();
-                setFleets(data);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let success = false;
+            
+            while (!success) {
+                try {
+                    const response = await fetch(`/api/get_fleets`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                    })
+                    
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        setFleets(data);
+                        success = true;
+                        setIsLoading(false)
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
             }
         }
         fetchData();
-    },[])
+    }, [])
 
+    if (isLoading) {
+        return (
+          <div className="flex items-center justify-center min-h-screen w-screen z-40 bg-stone-100">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-20 h-20 border-4 border-yellow-200 border-t-yellow-600 rounded-full animate-spin"></div>
+              <p className="text-black font-lg text-3xl">Loading ...</p>
+            </div>
+          </div>
+        )
+      }
+    
   return (
     <>
     {
@@ -206,15 +230,15 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         showSuccess &&
         <SuccessModal type={type}/>
     }
-    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[4vh] xl:top-[10%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl'>
+    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[4vh] xl:top-[10%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl max-w-[95%]'>
         <h1 className='md:text-[38px] text-[30px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
-        <div className=' w-80 h-11 rounded-xl flex items-center justify-center mb-12 bg-white text-black'>
-            <button type="button" className={`w-40 text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>{setIsOneWay(true);
+        <div className=' w-70 md:w-80 h-9 md:h-11 rounded-xl flex items-center justify-center mb-6 md:mb-12 bg-white text-black'>
+            <button type="button" className={`w-35 md:w-40 text-[17px] md:text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>{setIsOneWay(true);
                 setGetPrice(false);
                 setEstimatedPrice("");
             }}>
                 <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
-            <button type="button" className={`w-40 text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>{
+            <button type="button" className={`w-35 md:w-40 text-[17px] md:text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>{
                 setIsOneWay(false);
                 setGetPrice(false);
                 setEstimatedPrice("");
@@ -224,8 +248,8 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </div>
         <div className='flex items-center justify-center flex-col'>
 
-        <div ref={pickupRef} style={{ position: 'relative', width: '100%' }}>
-        <div className={`input-wrapper ${!validPickup ? 'red-wrapper' : ''}`}>                
+        <div ref={pickupRef} style={{ position: 'relative', width: '100%' }} className="max-w-[95%]">
+        <div className={`relative mb-[20px] ${!validPickup ? 'red-wrapper' : ''}`}>                
             <input type="text"
                     id="pickup"
                     className='input pickup'
@@ -266,7 +290,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </div>
 
         {isOneWay && (
-        <div ref={destinationRef} style={{ position: 'relative', width: '100%' }}>
+        <div ref={destinationRef} style={{ position: 'relative', width: '100%' }} className="max-w-[95%]">
             <div className={`input-wrapper ${!validDestination ? 'red-wrapper' : ''}`}>
                 <input type="text"
                     id="destination"
@@ -310,10 +334,10 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         )}
 
 
-        <div className='flex space-x-4'>
+        <div className='flex space-x-4 justify-center'>
         {/* Date Picker */}
-        <div className='flex flex-col bg-white rounded-md'>
-            <div className={`flex items-center border ${pickupDate ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-40 focus-within:border-black`}>
+        <div className='flex flex-col w-[45%] bg-white rounded-md'>
+            <div className={`flex items-center border ${pickupDate ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2  focus-within:border-black`}>
             <input
                 type="date"
                 id="pickup-date"
@@ -332,8 +356,8 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </div>
 
         {/* Time Picker */}
-        <div className='flex flex-col bg-white rounded-md'>
-            <div className={`flex items-center border ${pickupTime ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2 w-40 focus-within:border-black `}>
+        <div className='flex flex-col bg-white rounded-md w-[45%]'>
+            <div className={`flex items-center border ${pickupTime ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2  focus-within:border-black `}>
             <input
                 type="time"
                 id="pickup-time"
@@ -352,7 +376,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
         {
             Array.isArray(fleets) && fleets.length > 0 && (
-                <div className="w-full mt-4 text-black text-lg">
+                <div className="w-[95%] mt-4 text-black text-lg">
                     <Select onValueChange={handleValueChange} value={selectedFleetValue}>
                     <SelectTrigger className="w-full h-14 bg-white border-gray-200 focus-within:border-black text-2xl font-semibold ">
                         <SelectValue className="text-gray-200" placeholder="Choose vehicle type" />

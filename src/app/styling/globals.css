@@ -183,8 +183,9 @@ ul{
 }
 
 .pickup{
-  width: 400px;
+  width: 91%;
   height: 40px;
+  max-width: full;
   margin-bottom: 0;
   padding-right: 34px;
 }

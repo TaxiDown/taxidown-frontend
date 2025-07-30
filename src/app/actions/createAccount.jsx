@@ -2,6 +2,7 @@
 
 
 export default async function CreateAccount({email, password, password2, firstname, lastname, phone}) {
+  let status = null;
   try{
     const res = await fetch(`${process.env.API_URL}api/auth/registration/`, {
       method: 'POST',
@@ -17,9 +18,10 @@ export default async function CreateAccount({email, password, password2, firstna
         'Content-Type': 'application/json',
       },
     });
-      return res.status;
+      status = res.status;
+      return status;
   }
   catch (err) {
-    return res.status;
+    return status;
   }
 }
