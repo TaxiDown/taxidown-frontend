@@ -423,7 +423,7 @@ export default function PickupFor({
     </div>
     :
     <div className="relative flex bg-white flex-col-reverse md:flex-row mt-15 md:mx-15 md:mt-20 md:gap-10 md:p-7 h-max rounded-lg overflow-y-auto items-center justify-center md:min-h-[82%]">
-    <form className="relative inset-0 bg-white w-[100%] flex  md:pt-10 md:w-max flex-col items-center text-black h-max mt-[-20] pt-6 rounded-3xl">
+    <form className="relative inset-0 bg-white w-[100%] flex  md:pt-10 md:w-max flex-col items-center text-black h-max mt-[-20] py-10 rounded-3xl">
       {error && 
         <>
           <div className="mb-4 py-3 w-70 bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
@@ -784,13 +784,10 @@ export default function PickupFor({
       </button>
        
     </form>
-    <div className="border-none relative max-w-[800px] inset-0 w-full h-full  flex flex-col justify-center outline-none">
+    <div className="lg:sticky lg:top-8 border-none relative inset-0 w-full h-full  flex flex-col justify-center outline-none">
       
       <div ref={mapContainer} className="w-full max-w-[700px] h-[400px] md:rounded-lg outline-none" /> {/* Added rounded corners */}
-      {estimatedPrice &&
-      <>
-        <p className="my-3 font-bold text-green-900 text-md text-center"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
-      </>}
+      
       
     </div>
     </div>

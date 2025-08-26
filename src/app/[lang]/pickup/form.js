@@ -1,4 +1,4 @@
-'use client'
+/* 'use client'
 import {React, useState, useEffect, useRef} from 'react'
 import { MapPinIcon, ClockIcon, TruckIcon} from '@heroicons/react/24/solid'
 import { redirect, useRouter } from "next/navigation";
@@ -455,4 +455,4 @@ export default function PickupForm({ pick,  oneWay, perHour, pickupLocation, des
     </form>
     </>
   )
-}
+}*/
