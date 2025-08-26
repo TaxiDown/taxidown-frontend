@@ -6,7 +6,7 @@ import Signupform from '../(auth)/signup/form';
 import SignupLogin from './form';
 import {X} from "lucide-react";
 
-export default function PickLogin({ login, signup, closeModal, lang, submit }) {
+export default function PickLogin({ login, signup, closeModal, lang, submit, isGuest }) {
   const [isLogin, setLogin] = useState(false);
   const [isSignup, setSignup] = useState(false);
 
@@ -87,6 +87,16 @@ export default function PickLogin({ login, signup, closeModal, lang, submit }) {
                 className="h-12 text-black border border-stone-500 rounded-lg text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white"
               >
                 Login to your account
+              </button>
+            </div>
+            or
+            <div className="flex flex-col justify-start text-left mt-1">
+              <button
+                onClick={(e) => { isGuest(); closeModal(); submit(e);}}
+                className="h-max text-black border border-stone-500 rounded-lg text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white p-1"
+              >
+                Continue as guest
+                <p className='text-sm font-bold text-red-800'>You will not be able to cancel the ride</p>
               </button>
             </div>
           </div>

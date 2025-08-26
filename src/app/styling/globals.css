@@ -303,4 +303,8 @@ ul{
     @apply bg-background text-foreground;
   }
 }
+.gm-style, .gm-style * {
+  outline: none !important;
+  border:none !important;
+}
 

@@ -43,6 +43,21 @@ export async function POST(request) {
                 return NextResponse.json({ message: err }, { status: response.status })
         }
     }else{
-        return NextResponse.json({ message: 'Unauthorized' }, { status : 401 });
+        try{
+            const response = await fetch(`${process.env.API_URL}/api/trips/bookings/`,{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
+            if(response.ok){
+                const res = NextResponse.json({status : 200 });
+                return res
+            }
+            return NextResponse.json({status: response.status})
+        }catch(err){
+                return NextResponse.json({ message: err }, { status: response.status })
+        }
     }
 }

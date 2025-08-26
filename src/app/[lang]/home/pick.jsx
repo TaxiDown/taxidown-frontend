@@ -19,10 +19,10 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     const [isOneWay, setIsOneWay] = useState(true);
     const [pickupQuery, setpickupQuery] = useState('');
     const [pickupID, setPickupID] = useState('');
-    const [pickupResults, setpickupResults] = useState([]);
+    const [pickupResults, setPickupResults] = useState([]);
     const [destinationQuery, setdestinationQuery] = useState('');
     const [destinationID, setDestinationID] = useState('');
-    const [destinationResults, setdestinationResults] = useState([]);
+    const [destinationResults, setDestinationResults] = useState([]);
     const [showpickupResults, setShowpickupResults] = useState(false);
     const [showDestinationResults, setShowDestinationResults] = useState(false);
     const [validPickup, setvalidPickup] = useState(true);
@@ -38,7 +38,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     const [estimatedPrice, setEstimatedPrice] = useState("");
     const [selectedFleetID, setSelectedFleetID] = useState(null);
     const [selectedFleet, setSelectedFleet] = useState(null);
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
+
+    const [pickup, setPickup] = useState(null)
+    const [destinationCoords, setDestinationCoords] = useState(null);
+
+    const [isGuest, setIsGuest] = useState(false);
 
 
     const handleChange = (fleetId) => {
@@ -58,42 +63,44 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         }
         }
 
-    useEffect(() => {
-          if (pickupQuery.length < 1 ) {
-            setpickupResults([]);
-            return;
-          }
-      
-          const fetchSuggestions = async () => {
-            const url = `/api/auto_complete/?pickup=${pickupQuery}&dropoff=${destinationQuery}&field=pickup&ride_type=${isOneWay ? 'destination':'per_hour'}`;
-            const response = await fetch(url,{
-                method: 'GET',
-                headers: {'Content-Type': 'application/json',}
-            });
-            const data = await response.json();
-            setpickupResults(data);
-          };
-      
-          const timeoutId = setTimeout(fetchSuggestions, 300); // Debounce
-          return () => clearTimeout(timeoutId);
-        }, [pickupQuery]);
-    
-    useEffect(() => {
-        if (destinationQuery.length < 1) {
-            setdestinationResults([]);
-            return;
-        }
-    
-        const fetchSuggestions = async () => {
-            const url = `/api/auto_complete/?pickup=${pickupQuery}&dropoff=${destinationQuery}&field=dropoff&ride_type=${isOneWay ? 'destination':'per_hour'}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            setdestinationResults(data);
-        };
-    
-        const timeoutId = setTimeout(fetchSuggestions, 300); // Debounce
-        return () => clearTimeout(timeoutId);
-        }, [destinationQuery]);
+        useEffect(() => {
+            if (pickupQuery.length < 1) {
+              setPickupResults([])
+              return
+            }
+            const fetchSuggestions = async () => {
+              try {
+                const url = `/api/auto_complete/?searchQuery=${pickupQuery}`
+                const response = await fetch(url)
+                const data = await response.json()
+                setPickupResults(data)
+              } catch (error) {
+                console.error("Pickup autocomplete failed:", error)
+              }
+            }
+            const timeoutId = setTimeout(fetchSuggestions, 300)
+            return () => clearTimeout(timeoutId)
+          }, [pickupQuery])
+        
+          // Destination autocomplete
+          useEffect(() => {
+            if (destinationQuery.length < 1) {
+              setDestinationResults([])
+              return
+            }
+            const fetchSuggestions = async () => {
+              try {
+                const url = `/api/auto_complete/?searchQuery=${destinationQuery}`
+                const response = await fetch(url)
+                const data = await response.json()
+                setDestinationResults(data)
+              } catch (error) {
+                console.error("Destination autocomplete failed:", error)
+              }
+            }
+            const timeoutId = setTimeout(fetchSuggestions, 300)
+            return () => clearTimeout(timeoutId)
+          }, [destinationQuery])
     
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -110,40 +117,17 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
     const handleSubmit = async(e) => {
         e.preventDefault(); 
-        const datetime_pickup = new Date(`${pickupDate}T${pickupTime}:00`);
-        const response = await fetch(`/api/create_ride`,{
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ pickup_location: pickupQuery, dropoff_location: destinationQuery, datetime_pickup: `${pickupDate}T${pickupTime}:00`, id_vehicle_category: selectedFleetID}),
-        })
-        if(response.ok){
-            const data = await response.json();
-            setShowSuccess(true)
-            setType('success');
-            setTimeout(() => {
-                setShowSuccess(false);
-                router.push(`/${lang}/bookings`);
-            }, 4000);
-        }else if (response.status == 429){
-            setShowSuccess(true);
-            setType('limit');
-            setTimeout(() => {
-                setShowSuccess(false);
-            }, 5000);
-        }else if(response.status == 401){
-            setLogin(true);
-        }
-    
+        router.push(`/${lang}/pickup?pickup=${pickupQuery}&destination=${destinationQuery}&oneway=${isOneWay}`);
     }; 
+
 
     const estimatePrice = async (e) => {
         e.preventDefault();
-        if (!oneWay && (!pickupQuery || !destinationQuery || !pickupDate || !pickupTime || !selectedFleetID)) {
-            console.log("lalaaaaaaaaaa")
+        console.log(isOneWay);
+        if (!pickupQuery  || !pickupDate || !pickupTime || !selectedFleetID) {
             setError('Please fill in all fields.');
             return;
-        }else if(oneWay && (!pickupQuery || !pickupDate || !pickupTime || !selectedFleetID)){
+        }else if(isOneWay && !destinationQuery){
             setError('Please fill in all fields.');
             return;
         }
@@ -224,35 +208,41 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
     <>
     {
         IsLogin &&
-        <PickLogin login = {login} signup={signup} lang={lang} closeModal={()=>setLogin(false)} submit={handleSubmit}/>
+        <PickLogin login = {login} signup={signup} lang={lang} closeModal={()=>setLogin(false)} isGuest={setIsGuest} submit={handleSubmit}/>
     }
     {
         showSuccess &&
-        <SuccessModal type={type}/>
+        <SuccessModal type={type} />
     }
-    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col px-3 pb-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[4vh] xl:top-[10%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl max-w-[95%]'>
+    <form onSubmit={handleSubmit} className='flex items-center justify-center flex-col pb-3 px-3 md:p-7 mt-35 md:mt-12 mb-20 h-[500px] h-max w-max shadow-lg absolute md:top-[20vh] xl:top-[20%] md:left-30 bg-white/20 backdrop-blur-md rounded-xl '>
         <h1 className='md:text-[38px] text-[30px] truculenta font-medium mb-3 mt-5 md:m-6'>{pick}</h1>
-        <div className=' w-70 md:w-80 h-9 md:h-11 rounded-xl flex items-center justify-center mb-6 md:mb-12 bg-white text-black'>
-            <button type="button" className={`w-35 md:w-40 text-[17px] md:text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>{setIsOneWay(true);
+        <div className=' w-60 mx-5 md:w-80 h-9 md:h-11 rounded-xl flex items-center justify-center mb-6 md:mb-12 bg-white text-black'>
+            <button type="button" className={`w-30 md:w-40 text-[16px] md:text-[20px] border-black border-2 border-r-2 h-full rounded-s-xl flex items-center gap-2 pl-3 md:pl-5 cursor-pointer ${isOneWay ? 'bg-black text-white': 'bg-white text-black'}`} onClick={()=>{
+                setIsOneWay(true);
                 setGetPrice(false);
                 setEstimatedPrice("");
             }}>
-                <TruckIcon className={`w-6 h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
-            <button type="button" className={`w-35 md:w-40 text-[17px] md:text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>{
+                <TruckIcon className={`w-5 h-5 md:w-6 md:h-6 ${isOneWay ? 'text-white' : 'text-black'} `}/>{oneWay}</button>
+            <button type="button" className={`w-30 md:w-40 text-[16px] md:text-[20px] border-black border-2 border-l-0 h-full  rounded-e-xl flex items-center gap-2 pl-3 md:pl-5 cursor-pointer ${!isOneWay ? 'bg-black text-white' : 'bg-white text-black'}`} onClick={()=>{
                 setIsOneWay(false);
                 setGetPrice(false);
                 setEstimatedPrice("");
             }}>
-                <ClockIcon className={`w-6 h-6 ${isOneWay ? 'text-black' : 'text-white'} `} />
+                <ClockIcon className={`w-5 h-5 md:w-6 md:h-6 ${isOneWay ? 'text-black' : 'text-white'} `} />
                 {perHour}</button>
         </div>
         <div className='flex items-center justify-center flex-col'>
 
-        <div ref={pickupRef} style={{ position: 'relative', width: '100%' }} className="max-w-[95%]">
+        <div ref={pickupRef} className=" relative">
         <div className={`relative mb-[20px] ${!validPickup ? 'red-wrapper' : ''}`}>                
             <input type="text"
                     id="pickup"
-                    className='input pickup'
+                    className='peer appearance-none bg-[#fcfcfa] border border-[#9ca1a7] 
+                    rounded-md text-[#2d333a] text-base h-[40px] leading-[1.1] 
+                    px-4 transition duration-200 ease-in-out 
+                    focus:outline-none focus:border-black 
+                    valid:border-black
+                    w-90 max-w-[85vw] inline-block text-start'
                     value={pickupQuery}
                     onChange={(e) => {
                         setPickupID('')
@@ -263,7 +253,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     }}
                     required
                 />
-                <label htmlFor="pickup" className="label">{pickupLocation}*</label>
+                <label htmlFor="pickup" 
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#2d333a] text-base 
+                    transition-all duration-200 ease-in-out 
+                    peer-focus:text-sm peer-focus:top-0 peer-focus:left-[10px] peer-focus:text-black peer-focus:bg-[#fcfcfa] peer-focus:rounded-t-sm peer-focus:px-1
+                    peer-valid:text-sm peer-valid:top-0 peer-valid:left-[10px] peer-valid:text-black peer-valid:bg-[#fcfcfa] peer-valid:rounded-t-sm peer-valid:px-1">{pickupLocation}*</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -276,13 +270,13 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                             key={idx}
                             onClick={() => {
                                 setPickupID(place.id)
-                                setpickupQuery(place.name_location);
+                                setpickupQuery(place.place_name);
                                 setShowpickupResults(false);
                                 setvalidPickup(true);
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
-                            {place.name_location}
+                            {place.place_name}
                         </div>
                     ))}
                 </div>
@@ -290,11 +284,16 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         </div>
 
         {isOneWay && (
-        <div ref={destinationRef} style={{ position: 'relative', width: '100%' }} className="max-w-[95%]">
-            <div className={`input-wrapper ${!validDestination ? 'red-wrapper' : ''}`}>
+        <div ref={destinationRef} className=" relative">
+            <div className={` ${!validDestination ? 'red-wrapper' : ''}`}>
                 <input type="text"
                     id="destination"
-                    className={`input pickup`}
+                    className="peer appearance-none bg-[#fcfcfa] border border-[#9ca1a7] 
+                    rounded-md text-[#2d333a] text-base h-[40px] leading-[1.1] 
+                    px-4 transition duration-200 ease-in-out 
+                    focus:outline-none focus:border-black 
+                    valid:border-black
+                    w-90 max-w-[85vw] inline-block text-start"
                     value={destinationQuery}
                     onChange={(e) => {
                         setDestinationID('');
@@ -305,7 +304,12 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     }}
                     required
                 />
-                <label htmlFor="destination" className="label">{destination}*</label>
+                <label htmlFor="destination" 
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#2d333a] text-base 
+                transition-all duration-200 ease-in-out 
+                peer-focus:text-sm peer-focus:top-0 peer-focus:left-[10px] peer-focus:text-black peer-focus:bg-[#fcfcfa] peer-focus:rounded-t-sm peer-focus:px-1
+                peer-valid:text-sm peer-valid:top-0 peer-valid:left-[10px] peer-valid:text-black peer-valid:bg-[#fcfcfa] peer-valid:rounded-t-sm peer-valid:px-1">
+                    {destination}*</label>
                 <button type="button" className='show button'>
                     <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
                 </button>
@@ -319,108 +323,24 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                             key={idx}
                             onClick={() => {
                                 setDestinationID(place.id)
-                                setdestinationQuery(place.name_location);
+                                setdestinationQuery(place.place_name);
                                 setShowDestinationResults(false);
                                 setvalidDestination(true);
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
-                            {place.name_location}
+                            {place.place_name}
                         </div>
                     ))}
                 </div>
             )}
         </div>
         )}
-
-
-        <div className='flex space-x-4 justify-center'>
-        {/* Date Picker */}
-        <div className='flex flex-col w-[45%] bg-white rounded-md'>
-            <div className={`flex items-center border ${pickupDate ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2  focus-within:border-black`}>
-            <input
-                type="date"
-                id="pickup-date"
-                className="bg-transparent outline-none text-[16px] w-full"
-                value={pickupDate}
-                min={minDate}
-                onChange={(e) => {
-                    setPickupDate(e.target.value);
-                    setError('');
-                    setGetPrice(false);
-                }
-                }
-                required
-            />
-            </div>
-        </div>
-
-        {/* Time Picker */}
-        <div className='flex flex-col bg-white rounded-md w-[45%]'>
-            <div className={`flex items-center border ${pickupTime ? 'text-black border-black' : 'text-[#5f666e] border-[#9ca1a7]'} rounded-md px-4 py-2  focus-within:border-black `}>
-            <input
-                type="time"
-                id="pickup-time"
-                className="bg-transparent outline-none text-[16px] w-full"
-                value={pickupTime}
-                onChange={(e) => {
-                    setPickupTime(e.target.value)
-                    setError('');
-                    setGetPrice(false);
-                }}
-                required
-            />
-            </div>
-        </div>
-        </div>
-
-        {
-            Array.isArray(fleets) && fleets.length > 0 && (
-                <div className="w-[95%] mt-4 text-black text-lg">
-                    <Select onValueChange={handleValueChange} value={selectedFleetValue}>
-                    <SelectTrigger className="w-full h-14 bg-white border-gray-200 focus-within:border-black text-2xl font-semibold ">
-                        <SelectValue className="text-gray-200" placeholder="Choose vehicle type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {fleets.map((fleet) => (
-                        <SelectItem key={fleet.id} value={fleet.name_category}>
-                            <div className="flex items-center gap-2 text-lg font-semibold">
-                            {fleet.image && (
-                                <img
-                                src={fleet.image || "/placeholder.svg?height=24&width=24&text=Image"}
-                                alt={fleet.name_category}
-                                className="w-6 h-6 object-cover rounded"
-                                onError={(e) => (e.currentTarget.style.display = "none")}
-                                />
-                            )}
-                            <span>{fleet.name_category}</span>
-                            </div>
-                        </SelectItem>
-                        ))}
-                    </SelectContent>
-                    </Select>
-                </div>
-                
-            )
-        }
         
-        {!getPrice ?
-        <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-4 min-w-max' onClick={estimatePrice}>
+        <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-4 min-w-max' type='submit'>
             {getOffer}
         </button>
-        :
-        <>
-        <p className="my-3 font-bold text-green-900 text-md"> {pickdict.estimatedPrice}: {estimatedPrice}</p>
-        <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] min-w-max' type='submit'>
-            {pickdict.createRide}
-        </button>
-        </>
-        }
-        {error && 
-        <>
-        <p className="mt-3 font-bold text-red-600 text-lg"> {error}</p>
-        </>
-        }      
+        
         </div>
     </form>
     </>
