@@ -176,10 +176,26 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
               </div>
             </div>
 
-            <div className="w-full flex justify-between items-center p-2 rounded-lg border-gray-200">
+            <div className="w-full flex justify-between items-center pr-2 rounded-lg border-gray-200">
               <p className="text-orange-600 text-lg font-medium">Estimated Price</p>
               <p className="text-orange-600 text-xl font-bold">€{pickupData.price}</p>
             </div>
+            {pickupData.returnPrice &&
+            <div>
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Return Ride</h3>
+            <div className="flex items-center space-x-3">
+                <Calendar className="w-5 h-5 text-gray-700" />
+                <div>
+                <p className="font-medium">Preferred Time</p>
+                <p className="text-gray-600">{pickupData.returnDate}{'\u00A0'}{'\u00A0'}{'\u00A0'}{pickupData.returnTime}</p>
+                </div>
+            </div>
+            <div className="w-full flex justify-between items-center p-1 pl-0 rounded-lg border-gray-200">
+              <p className="text-orange-600 text-lg font-medium">Estimated Return Price</p>
+              <p className="text-orange-600 text-xl font-bold">€{pickupData.returnPrice}</p>
+            </div>
+            </div>
+            }
             <div>
                 <h3 className="font-bold text-gray-900 text-lg">Payment Method</h3>
                 <RadioGroup defaultValue="cash" onValueChange={(value)=>{setPaymentCash(value);}} className={"mt-3"}>

@@ -424,7 +424,7 @@ export default function PickupFor({
         Back to Form
       </Button>
     </div>
-      <PickupDetails pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={estimatePrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
+      <PickupDetails pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={estimatedPrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
     </div>
     :
     <div className="relative flex flex-col-reverse md:flex-row mt-15 md:mx-15 md:mt-20 md:mb-10 md:gap-10 h-max  overflow-y-auto md:min-h-[82%]">
