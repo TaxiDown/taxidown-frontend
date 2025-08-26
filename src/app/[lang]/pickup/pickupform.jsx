@@ -276,12 +276,15 @@ export default function PickupFor({
   }
 
   useEffect(() => {
+    setIsPickingPickup(searchParams.get("pick") === "true" || false);
+    setIsPickingDestination(searchParams.get("dest") === "true" || false);
+
     forwardGeocode(pickupQuery, setPickup)
     forwardGeocode(destinationQuery, setDestinationCoords)
 
     const now = new Date()
     
-    const minDateTime = new Date(now.getTime() + 4 * 60 * 60 * 1000) // Add 4 hours
+    const minDateTime = new Date(now.getTime())
 
     setMinDate(minDateTime)
 

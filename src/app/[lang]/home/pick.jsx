@@ -6,10 +6,11 @@ import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 import PickLogin from './pick_login';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Link from 'next/link';
 
 
 export default function Pick({ pick,  oneWay, perHour, pickupLocation, destination, getOffer, login, signup, pickdict, lang}) {
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [IsLogin, setLogin] = useState(false);
     const router = useRouter();
     const [showSuccess, setShowSuccess] = useState(false);
@@ -120,75 +121,25 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
         router.push(`/${lang}/pickup?pickup=${pickupQuery}&destination=${destinationQuery}&oneway=${isOneWay}`);
     }; 
 
-
-    const estimatePrice = async (e) => {
-        e.preventDefault();
-        console.log(isOneWay);
-        if (!pickupQuery  || !pickupDate || !pickupTime || !selectedFleetID) {
-            setError('Please fill in all fields.');
-            return;
-        }else if(isOneWay && !destinationQuery){
-            setError('Please fill in all fields.');
-            return;
-        }
-        const pickupDateTime = new Date(`${pickupDate}T${pickupTime}:00`);
-        if (now > pickupDateTime){ 
-            setError('Please choose a date after now, at least 4 hours.');
-            return;
-        }
-
-
-        try {
-            const res = await fetch(`/api/get_price`, {
-                cache: "no-store",
-                method: 'POST',
-                body: JSON.stringify({
-                    pickup_location: pickupQuery,
-                    dropoff_location: destinationQuery,
-                    datetime_pickup: `${pickupDate}T${pickupTime}:00`,
-                    id_vehicle_category: selectedFleetID,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            if (res.status === 200) {
-                const data = await res.json();
-                setGetPrice(true);
-                setEstimatedPrice(data.price);
-            } else {
-                setGetPrice(true);
-                setEstimatedPrice(pickdict.undetermined);
-            }
-        } catch (err) {
-            setError('Failed to get price estimate. Please try again.');
-        }
-    };
-    
-
     useEffect(() => {
         const fetchData = async () => {
-            let success = false;
+        let success = false;
+        try {
+            const response = await fetch(`/api/get_fleets`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+            })
             
-            while (!success) {
-                try {
-                    const response = await fetch(`/api/get_fleets`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                    })
-                    
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        setFleets(data);
-                        success = true;
-                        setIsLoading(false)
-                    }
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                }
+            if (response.status === 200) {
+                const data = await response.json();
+                setFleets(data);
+                success = true;
+                setIsLoading(false)
             }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
         }
         fetchData();
     }, [])
@@ -258,9 +209,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                     transition-all duration-200 ease-in-out 
                     peer-focus:text-sm peer-focus:top-0 peer-focus:left-[10px] peer-focus:text-black peer-focus:bg-[#fcfcfa] peer-focus:rounded-t-sm peer-focus:px-1
                     peer-valid:text-sm peer-valid:top-0 peer-valid:left-[10px] peer-valid:text-black peer-valid:bg-[#fcfcfa] peer-valid:rounded-t-sm peer-valid:px-1">{pickupLocation}*</label>
-                <button type="button" className='show button'>
-                    <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
-                </button>
+                <Link href={`/${lang}/pickup?pickup=${pickupQuery}&destination=${destinationQuery}&oneway=${isOneWay}&pick=true`}>
+                    <button type="button" className='show button'>
+                        <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
+                    </button>
+                </Link>
             </div>
             {!validPickup && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid pickup locations.</div>}
             {showpickupResults && pickupResults.length > 0 && (
@@ -310,9 +263,11 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 peer-focus:text-sm peer-focus:top-0 peer-focus:left-[10px] peer-focus:text-black peer-focus:bg-[#fcfcfa] peer-focus:rounded-t-sm peer-focus:px-1
                 peer-valid:text-sm peer-valid:top-0 peer-valid:left-[10px] peer-valid:text-black peer-valid:bg-[#fcfcfa] peer-valid:rounded-t-sm peer-valid:px-1">
                     {destination}*</label>
-                <button type="button" className='show button'>
-                    <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
-                </button>
+                <Link href={`/${lang}/pickup?pickup=${pickupQuery}&destination=${destinationQuery}&oneway=${isOneWay}&dest=true`}>
+                    <button type="button" className='show button'>
+                        <MapPinIcon className="h-5 w-5 text-red-500 mr-2" />
+                    </button>
+                </Link>
             </div>
             {!validDestination && <div className='text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full'>Choose from valid destinations.</div>}
 

@@ -72,21 +72,12 @@ export default function PickLogin({ login, signup, closeModal, lang, submit, isG
           <div className="relative p-6 rounded-lg shadow-lg text-center max-w-sm w-full bg-stone-100 py-15">
             <button className='cursor-pointer absolute top-5 right-5' onClick={() => {closeModal();}}><X className='text-sm'/></button>
             <h2 className="text-2xl font-semibold mb-6">You have to login first!</h2>
-            <div className="flex flex-col justify-start text-left mb-1">
-              <button
-                onClick={() => setSignup(true)}
-                className="h-12 text-black border border-stone-500 rounded-lg text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white"
-              >
-                Create an account
-              </button>
-            </div>
-            or
             <div className="flex flex-col justify-start text-left mt-1">
               <button
                 onClick={() => setLogin(true)}
                 className="h-12 text-black border border-stone-500 rounded-lg text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white"
               >
-                Login to your account
+                Signup or Login
               </button>
             </div>
             or
@@ -96,7 +87,7 @@ export default function PickLogin({ login, signup, closeModal, lang, submit, isG
                 className="h-max text-black border border-stone-500 rounded-lg text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white p-1"
               >
                 Continue as guest
-                <p className='text-sm font-bold text-red-800'>You will not be able to cancel the ride</p>
+                <p className='text-xs text-red-800'>You will not be able to cancel the ride</p>
               </button>
             </div>
           </div>
