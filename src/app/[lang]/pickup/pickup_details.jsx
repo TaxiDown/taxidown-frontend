@@ -125,7 +125,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
         <SuccessModal type={type} isGuest={isGuest}/>
     }
     <form className="mt-[-20] flex items-center justify-center" onSubmit={fetchData}>
-        <div className="bg-white rounded-xl shadow p-6 w-120">
+        <div className=" md:bg-white rounded-xl md:shadow p-6 w-90 md:w-120">
           <h2 className="text-lg font-semibold mb-1">Pickup Confirmation</h2>
           <p className="text-sm text-gray-500 mb-4">Review your pickup details</p>
           
@@ -160,7 +160,6 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
             </div>
            </div>
             
-
             <div className="flex items-center space-x-3">
               <Phone className="w-5 h-5 text-gray-700" />
               <div>
@@ -178,8 +177,8 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
             </div>
 
             <div className="w-full flex justify-between items-center p-2 rounded-lg border-gray-200">
-              <p className="text-gray-500 text-lg font-medium">Estimated Price</p>
-              <p className="text-gray-900 text-xl font-bold">€{pickupData.price}</p>
+              <p className="text-orange-600 text-lg font-medium">Estimated Price</p>
+              <p className="text-orange-600 text-xl font-bold">€{pickupData.price}</p>
             </div>
             <div>
                 <h3 className="font-bold text-gray-900 text-lg">Payment Method</h3>
@@ -194,7 +193,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
                     </div>
                 </RadioGroup>
             </div>
-            <Button className="w-full cursor-pointer text-white rounded-lg text-[17px] p-3 py-5 bg-gray-900 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black min-w-max" type="submit">Confirm Booking</Button>
+            <Button className="w-full cursor-pointer text-white rounded-lg text-[17px] p-3 py-5 bg-orange-500 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black min-w-max" type="submit">Confirm Booking</Button>
           </div>
         </div>        
       </form>

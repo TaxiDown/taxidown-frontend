@@ -417,10 +417,10 @@ export default function PickupFor({
   return (
     <>
     {estimatedPrice ?
-    <div className="mt-10 container mx-auto p-6 max-w-4xl">
-    <div className="mb-4">
-      <Button variant="ghost" size="sm" className="cursor-pointer" onClick={()=>setEstimatedPrice("")}>
-        <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className="relative mt-13 container mx-auto p-6 max-w-4xl">
+    <div className="mb-4 ">
+      <Button variant="ghost" size="md" className="cursor-pointer text-md border border-gray-300 p-2 hover:border-black md:border-none" onClick={()=>setEstimatedPrice("")}>
+        <ArrowLeft className="w-5 h-5 mr-2" />
         Back to Form
       </Button>
     </div>
