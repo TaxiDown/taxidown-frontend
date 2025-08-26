@@ -342,10 +342,12 @@ export default function PickupFor({
     try {
       const body = {
         pickup_coordinates: pickup,
-        dropoff_coordinates: destinationCoords,
         id_vehicle_category: selectedFleetID,
         datetime_pickup: `${selectedDate}T${selectedTime}:00`,
       };
+
+      if(isOneWay)
+        body.dropoff_coordinates = destinationCoords
     
       if (showDateTime) {
         body.datetime_return = `${returnDate}T${returnTime}:00`;
@@ -419,11 +421,12 @@ export default function PickupFor({
         Back to Form
       </Button>
     </div>
-      <PickupDetails pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={estimatedPrice[0]} returnPrice={estimatePrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
+      <PickupDetails pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={estimatePrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
     </div>
     :
-    <div className="relative flex bg-white flex-col-reverse md:flex-row mt-15 md:mx-15 md:mt-20 md:gap-10 md:p-7 h-max rounded-lg overflow-y-auto items-center justify-center md:min-h-[82%]">
-    <form className="relative inset-0 bg-white w-[100%] flex  md:pt-10 md:w-max flex-col items-center text-black h-max mt-[-20] py-10 rounded-3xl">
+    <div className="relative flex flex-col-reverse md:flex-row mt-15 md:mx-15 md:mt-20 md:mb-10 md:gap-10 h-max  overflow-y-auto md:min-h-[82%]">
+      
+    <form className="relative inset-0 bg-white w-[100%] flex mt-[-20] md:mt-0 md:pt-15 md:p-8 md:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
       {error && 
         <>
           <div className="mb-4 py-3 w-70 bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
@@ -432,7 +435,7 @@ export default function PickupFor({
         </>
       }
       {(isPickingPickup || isPickingDestination) && (
-        <div className="mb-4 p-3 bg-blue-100 border-l-4 border-blue-500 rounded text-blue-800 text-center font-medium">
+        <div className="mb-4 p-3 bg-orange-100 border-l-4 border-orange-500 rounded text-orange-800 text-center font-medium">
           {isPickingPickup
             ? "Click on the map to select pickup location"
             : "Click on the map to select destination"}
@@ -455,6 +458,8 @@ export default function PickupFor({
           className={`w-35 md:w-40 text-[17px] md:text-[20px] border-black border-2 border-l-0 h-full rounded-e-xl flex items-center gap-2 pl-5 cursor-pointer ${!isOneWay ? "bg-black text-white" : "bg-white text-black"}`}
           onClick={() => {
             setIsOneWay(false)
+            setDestinationCoords("")
+            setDestinationQuery("")
             setError("")
           }}
         >
@@ -464,13 +469,14 @@ export default function PickupFor({
       </div>
       <div className="flex gap-4 w-100 max-w-[90%]">
         <div className="flex flex-col items-center pt-2">
-          <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-white shadow-md"></div>
           {isOneWay && (
             <>
+              <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-white shadow-md"></div>
               <div className="w-px h-12 bg-gray-300 my-2"></div>
               <MapPinIcon className="w-4 h-4 text-red-500" />
             </>
-          )}
+          )
+          }
         </div>
         <div className="flex-1 space-y-4">
           <div ref={pickupRef} className="relative w-full max-w-[95%]">
@@ -512,8 +518,8 @@ export default function PickupFor({
                       onClick={() => {
                         setPickupID(place.id)
                         setPickupQuery(place.place_name)
-                        setShowPickupResults(false) // Fixed function name
-                        setValidPickup(true) // Fixed function name
+                        setShowPickupResults(false)
+                        setValidPickup(true)
                         forwardGeocode(place.place_name, setPickup)
                       }}
                       className="p-2 hover:bg-gray-100 cursor-pointer text-black"
@@ -654,13 +660,14 @@ export default function PickupFor({
                 
             )
         }
-
+        {isOneWay && 
         <div className="w-90 flex items-center space-x-2 mt-5">
           <Checkbox id="schedule" checked={showDateTime} className="w-5 h-5" onCheckedChange={setShowDateTime} />
           <label htmlFor="schedule" className="text-lg text-stone-800">
             Add return way
           </label>
         </div>
+        }
         {showDateTime &&
         <div className="grid grid-cols-2 gap-4 w-90 mt-2">
         <div className="w-full">
@@ -709,21 +716,21 @@ export default function PickupFor({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center justify-end gap-1">
           <User className="w-5 h-5 text-stone-700" />
-          <span className="text-lg font-medium text-stone-800">Adults</span>
+          <span className="text-lg font-bold text-stone-800">Adults</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setAdults((prev) => Math.max(1, prev - 1))}
-            className="flex items-center justify-center w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300"
+            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Minus className="w-4 h-4" />
           </button>
-          <span className="w-max text-center border rounded-md py-1 px-2">{adults}</span>
+          <div className="w-max text-center py-1 px-2">{adults}</div>
           <button
             type="button"
             onClick={() => setAdults((prev) => prev + 1)}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-stone-200 hover:bg-stone-300"
+            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -732,22 +739,22 @@ export default function PickupFor({
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
-          <Baby className="w-5 h-5 text-stone-700" />
+          <Baby className="w-5 h-5 text-stone-600" />
           <span className="text-lg font-medium text-stone-800">Children</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
-            className="flex items-center justify-center w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300"
+            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Minus className="w-4 h-4" />
           </button>
-          <span className="w-max text-center border rounded-md py-1 px-2">{children}</span>
+          <div className="w-max text-center rounded-md py-1 px-2">{children}</div>
           <button
             type="button"
             onClick={() => setChildren((prev) => prev + 1)}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-stone-200 hover:bg-stone-300"
+            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -778,17 +785,13 @@ export default function PickupFor({
         rows={1} 
       />
     </div>
-      
-      <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-7 min-w-max' onClick={estimatePrice}>
-          {getOffer}
-      </button>
-       
+    <button className='cursor-pointer bg-orange-500 text-white rounded-3xl text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-orange-600 hover:text-orange-600 w-[130px] mt-3 min-w-max' onClick={estimatePrice}>
+        {getOffer}
+    </button>
     </form>
-    <div className="lg:sticky lg:top-8 border-none relative inset-0 w-full h-full  flex flex-col justify-center outline-none">
-      
-      <div ref={mapContainer} className="w-full max-w-[700px] h-[400px] md:rounded-lg outline-none" /> {/* Added rounded corners */}
-      
-      
+
+    <div className="shadow-custom border-none relative inset-0 w-full h-full flex flex-col justify-center outline-none">
+      <div ref={mapContainer} className="w-full h-[400px] md:h-[85vh] md:rounded-lg outline-none" />
     </div>
     </div>
     }
