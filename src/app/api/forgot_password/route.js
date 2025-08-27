@@ -6,7 +6,7 @@ export async function POST(request) {
     let status = null;
 
     try{
-        const response = await fetch(`${process.env.API_URL}/api/auth/password/reset/`,{
+        const response = await fetch(`${process.env.API_URL}api/auth/password/reset/`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'

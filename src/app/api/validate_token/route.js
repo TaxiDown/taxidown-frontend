@@ -11,10 +11,10 @@ export async function POST() {
 
   if (access) {
     try {
-      const res = await fetch(`${process.env.API_URL}/api/auth/token/verify/`, {
+      const res = await fetch(`${process.env.API_URL}api/auth/token/verify/`, {
         cache: "no-store",
         method: 'POST',
-        body: JSON.stringify({ token: access }), // ✅ Correct format
+        body: JSON.stringify({ token: access }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -30,7 +30,6 @@ export async function POST() {
     }
   }
 
-  // Access token not found, try refresh
   if (!access && refresh) {
     
     const result = await RefreshAccessToken(refresh);
@@ -40,11 +39,10 @@ export async function POST() {
       const response = NextResponse.json({ message: 'Token refreshed' }, { status: 200 });
       response.headers.set('Set-Cookie', result.setCookie);
 {/*      response.headers.set('Set-Cookie', `access=${access}; refresh=${refresh}; Path=/; HttpOnly`);
-*/}      return response;
+*/}    return response;
     } else {
       return NextResponse.json({ message: 'Unauthorized' }, { status: status || 401 });
     }
   }
-
   return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 }

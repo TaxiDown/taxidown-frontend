@@ -1,4 +1,3 @@
-// components/SuccessModal.jsx
 export default function SuccessModal({ type, isGuest }) {
   
     return (

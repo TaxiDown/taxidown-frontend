@@ -21,7 +21,7 @@ export async function POST(request) {
         }
     }if(access){
         try{
-            const response = await fetch(`${process.env.API_URL}/api/trips/bookings/`,{
+            const response = await fetch(`${process.env.API_URL}api/trips/bookings/`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -30,8 +30,9 @@ export async function POST(request) {
                 body: JSON.stringify(body),
             });
             const jsonResponse = await response.json()
+            console.log(jsonResponse)
             if(response.status === 201){
-                const res = NextResponse.json({ message: jsonResponse },{status : 200 });
+                const res = NextResponse.json({ message: 'Ride created successfully' },{status : response.status });
                 if (cookieHeader2){
                     res.headers.set('Set-Cookie', cookieHeader2)
                 }
@@ -39,25 +40,26 @@ export async function POST(request) {
             }
             return NextResponse.json({ message: jsonResponse },{status: response.status})
         }catch(err){
-                return NextResponse.json({ message: err }, { status: response.status })
+                return NextResponse.json({ message: err }, { status: 500 })
         }
     }else{
         try{
-            const response = await fetch(`${process.env.API_URL}/api/trips/bookings/`,{
+            const response = await fetch(`${process.env.API_URL}api/trips/bookings/`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(body),
             });
-            const jsonResponse = await response.json()
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
             if(response.status === 201 ){
-                const res = NextResponse.json({ message: jsonResponse },{status :  response.status });
+                const res = NextResponse.json({ message: 'Ride created successfully' },{status :  response.status });
                 return res
             }
             return NextResponse.json({ message: jsonResponse }, {status: response.status})
         }catch(err){
-                return NextResponse.json({ message: err }, { status: response.status })
+                return NextResponse.json({ message: err }, { status: 500 })
         }
     }
 }
