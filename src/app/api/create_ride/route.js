@@ -18,8 +18,6 @@ export async function POST(request) {
     
         if (result.status === 200 && access) {
           cookieHeader2 = result.setCookie;
-        } else {
-          return NextResponse.json({ message: 'Unauthorized' }, { status : 401 });
         }
     }if(access){
         try{
@@ -31,14 +29,15 @@ export async function POST(request) {
                 },
                 body: JSON.stringify(body),
             });
-            if(response.ok){
-                const res = NextResponse.json({status : 200 });
+            const jsonResponse = await response.json()
+            if(response.status === 201){
+                const res = NextResponse.json({ message: jsonResponse },{status : 200 });
                 if (cookieHeader2){
                     res.headers.set('Set-Cookie', cookieHeader2)
                 }
                 return res
             }
-            return NextResponse.json({status: response.status})
+            return NextResponse.json({ message: jsonResponse },{status: response.status})
         }catch(err){
                 return NextResponse.json({ message: err }, { status: response.status })
         }
@@ -51,11 +50,12 @@ export async function POST(request) {
                 },
                 body: JSON.stringify(body),
             });
-            if(response.ok){
-                const res = NextResponse.json({status : 200 });
+            const jsonResponse = await response.json()
+            if(response.status === 201 ){
+                const res = NextResponse.json({ message: jsonResponse },{status :  response.status });
                 return res
             }
-            return NextResponse.json({status: response.status})
+            return NextResponse.json({ message: jsonResponse }, {status: response.status})
         }catch(err){
                 return NextResponse.json({ message: err }, { status: response.status })
         }

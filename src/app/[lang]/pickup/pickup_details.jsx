@@ -59,6 +59,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
     if (response.status === 200) {
         const data = await response.json();
         setLoggedIn(true);
+        handleSubmit(e);
         
     } else {
         setLoggedIn(false);
@@ -93,8 +94,8 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
         credentials: 'include',
         body: JSON.stringify(body),
     })
-    if(response.ok){
-        const data = await response.json();
+    const data = await response.json();
+    if(response.status === 201){
         setShowSuccess(true)
         setType('success');
         setTimeout(() => {
@@ -103,6 +104,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
                 router.push(`/${lang}/bookings`);
         }, 4000);
     }else if (response.status == 429){
+        console.log(data);
         setShowSuccess(true);
         setType('limit');
         setTimeout(() => {
@@ -180,7 +182,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
               <p className="text-orange-600 text-lg font-medium">Estimated Price</p>
               <p className="text-orange-600 text-xl font-bold">€{pickupData.price}</p>
             </div>
-            {pickupData.returnPrice &&
+            {pickupData.returnPrice ?
             <div>
             <h3 className="font-bold text-gray-900 text-lg mb-2">Return Ride</h3>
             <div className="flex items-center space-x-3">
@@ -195,7 +197,7 @@ export default function PickupDetails({pickup, destination, pickupCoords, destin
               <p className="text-orange-600 text-xl font-bold">€{pickupData.returnPrice}</p>
             </div>
             </div>
-            }
+            : <></>}
             <div>
                 <h3 className="font-bold text-gray-900 text-lg">Payment Method</h3>
                 <RadioGroup defaultValue="cash" onValueChange={(value)=>{setPaymentCash(value);}} className={"mt-3"}>
