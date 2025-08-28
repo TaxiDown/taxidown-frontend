@@ -20,6 +20,19 @@ import PickupDetailsPage from "./pickup_details";
 import PickupDetails from "./pickup_details";
 import { Phone } from "lucide-react";
 
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+
+const schema = z.object({
+  phone: z
+    .string()
+    .min(1, 'Required')
+    .refine((val) => isValidPhoneNumber(val || ''), { message: 'Invalid phone number' }),
+});
+
 
 export default function PickupFor({
   pick,
@@ -33,6 +46,15 @@ export default function PickupFor({
   pickdict,
   lang,
 }) {
+
+  const {
+    control,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { phone: '' },
+  });
 
   const router = useRouter();
 
@@ -333,6 +355,7 @@ export default function PickupFor({
   const estimatePrice = async (e) =>{
     e.preventDefault();
     setButtonLoading(true);
+    
     if (!pickupQuery  || !selectedDate || !selectedTime || !selectedFleetID || !phone) {
       setError(`${pickdict.fillFields}`);
       setButtonLoading(false);
@@ -358,6 +381,11 @@ export default function PickupFor({
         setButtonLoading(false);
         return;
       }
+    }
+    const isValid = await trigger("phone");
+    if(!isValid){ 
+      setButtonLoading(false);
+      return;
     }
     setError("");
     try {
@@ -791,17 +819,41 @@ export default function PickupFor({
         </div>
       </div>
     </div>
-    <div className={`flex items-center w-90 mt-5`}>
-    <Phone className="w-5 h-5 text-gray-600" />
-    <input
-        id="phone"
-        className="border-b-2 p-2 border-stone-600 w-full outline-none resize-none overflow-hidden"
-        value={phone}
-        onChange={(e)=>{setPhone(e.target.value); setError("");}}
-        placeholder={`${pickdict.phone}`}
-        required
-      />
+    <div className="flex flex-col w-90 mt-5">
+      <label htmlFor="phone" className="block text-sm font-medium">
+        Phone
+      </label>
+
+      <div className={`flex items-center  p-2 ${
+                errors.phone ? "border-b-2 border-red-500" : "border-b-2 border-stone-600"
+              }`}>
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field }) => (
+            <PhoneInput
+              {...field}
+              id="phone"
+              defaultCountry="ES"
+              placeholder={pickdict.phone || "Enter phone"}
+              international
+              countryCallingCodeEditable={true}
+              className={`w-full *:outline-none focus:border-none`}
+              onChange={(value) => {
+                field.onChange(value);  
+                setPhone(value);
+                setError("");
+              }}
+            />
+          )}
+        />
+      </div>
+
+      {errors.phone && (
+        <p className="text-md mt-1 text-red-600 w-full text-center">{errors.phone.message}</p>
+      )}
     </div>
+
     <div className={`flex items-center w-90 mt-5 mb-[20px]`}>
       <MessageCircleMore className="h-6 w-6 text-gray-600" />
       <textarea
