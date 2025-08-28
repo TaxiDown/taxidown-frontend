@@ -130,6 +130,7 @@
     "selectPickup": "Click on the map to select pickup location",
     "selectDest": "Click on the map to select destination",
     "failedEstimate": "Failed to get price estimate. Please try again.",
+    "failed": "Failed to get price estimate. Please Choose valid Locations.",
     "fillFields": "Please fill in all fields.",
     "pickConfirm": "Pickup Confirmation",
     "details": "Review your pickup details",

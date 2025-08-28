@@ -60,7 +60,10 @@ export default function PickupFor({
 
   const [error, setError] = useState('')
   const searchParams = useSearchParams();
-  const [isOneWay, setIsOneWay] = useState(searchParams.get("oneway") === "true" || true)
+  const [isOneWay, setIsOneWay] = useState(() => {
+    const param = searchParams.get("oneway");
+    return param !== null ? param === "true" : true;
+  });
   const [pickupQuery, setPickupQuery] = useState(searchParams.get("pickup") || "")
   const [pickupID, setPickupID] = useState("")
   const [pickupResults, setPickupResults] = useState([])
@@ -133,12 +136,12 @@ export default function PickupFor({
     }
 
     if (pickup) {
-      map.flyTo({ center: pickup, zoom: 10, duration: 1000 });
+      map.flyTo({ center: pickup, zoom: 10, duration: 1000, maxBounds: [-10.632, 35.907, 3.153, 43.795]});
       return;
     }
 
     if (destinationCoords) {
-      map.flyTo({ center: destinationCoords, zoom: 10, duration: 1000 });
+      map.flyTo({ center: destinationCoords, zoom: 10, duration: 1000, maxBounds: [-10.632, 35.907, 3.153, 43.795]});
       return;
     }
   }, [pickup, destinationCoords, mapRef]);
@@ -203,17 +206,18 @@ export default function PickupFor({
       style: "mapbox://styles/mapbox/streets-v12",
       center,
       zoom: 6,
+      maxBounds: [-10.632, 35.907, 3.153, 43.795]
     })
 
     mapRef.current.on("click", (e) => {
       const lngLat = [e.lngLat.lng, e.lngLat.lat]
       
-      if (isPickingPickupRef.current) {
+      if (isPickingPickupRef.current && lngLat) {
         setPickup(lngLat)
         reverseGeocode(lngLat, setPickupQuery, setPickupID)
         setIsPickingPickup(false)
         setValidPickup(true)
-      } else if (isPickingDestinationRef.current) {
+      } else if (isPickingDestinationRef.current && lngLat) {
         setDestinationCoords(lngLat)
         reverseGeocode(lngLat, setDestinationQuery, setDestinationID)
         setIsPickingDestination(false)
@@ -287,12 +291,14 @@ export default function PickupFor({
   }, [])
 
   const handlePickupMapClick = () => {
+    setError("");
     setIsPickingPickup(true)
     setIsPickingDestination(false)
     setShowPickupResults(false)
   }
 
   const handleDestinationMapClick = () => {
+    setError("");
     setIsPickingDestination(true)
     setIsPickingPickup(false)
     setShowDestinationResults(false)
@@ -301,9 +307,10 @@ export default function PickupFor({
   useEffect(() => {
     setIsPickingPickup(searchParams.get("pick") === "true" || false);
     setIsPickingDestination(searchParams.get("dest") === "true" || false);
-
-    forwardGeocode(pickupQuery, setPickup)
-    forwardGeocode(destinationQuery, setDestinationCoords)
+    if(pickupQuery)
+      forwardGeocode(pickupQuery, setPickup)
+    if(destinationQuery)
+      forwardGeocode(destinationQuery, setDestinationCoords)
 
     const now = new Date()
     
@@ -354,6 +361,7 @@ export default function PickupFor({
 
   const estimatePrice = async (e) =>{
     e.preventDefault();
+    setError("");
     setButtonLoading(true);
     
     if (!pickupQuery  || !selectedDate || !selectedTime || !selectedFleetID || !phone) {
@@ -416,6 +424,9 @@ export default function PickupFor({
           const data = await res.json();
           setEstimatedPrice(data.price);
          // router.push(`/${lang}/pickup-details?pickup=${pickupQuery}&destination=${destinationQuery}&pickCoords=${pickup.join(",")}&destinationCoords=${destinationCoords.join(",")}&phone=${phone}&pickupDate=${selectedDate}&pickupTime=${selectedTime}&price=${estimatedPrice[0]}&returnPrice=${estimatePrice[1]}&adults=${adults}&childern=${children}&note=${comment}&returnDate=${returnDate}&returnTime=${returnTime}&vehicleID=${selectedFleetID}&vehicle=${selectedFleetValue}`)
+      }else if(res.status === 404){
+        setError(pickdict.failed);
+        setButtonLoading(false);
       } else {
         setError(`${pickdict.failedEstimate}`);
         setButtonLoading(false);
@@ -436,7 +447,6 @@ export default function PickupFor({
                 const response = await fetch(`/api/get_fleets`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
                 })
                 
                 if (response.status === 200) {
@@ -466,19 +476,19 @@ export default function PickupFor({
     <>
     {estimatedPrice ?
       <div className="mb-4 relative ">
-      <Button variant="ghost" size="md" className={`bg-white p-2 md:bg-transparent z-500 absolute top-0 left-2 cursor-pointer mt-16 md:ml-10 text-md hover:border-black`} onClick={()=>{setEstimatedPrice(""); setButtonLoading(false);}}>
+      <Button variant="ghost" size="md" className={`bg-white p-2 lg:bg-transparent z-500 absolute top-0 left-2 cursor-pointer mt-16 lg:ml-10 text-md hover:border-black`} onClick={()=>{setEstimatedPrice(""); setButtonLoading(false);}}>
         <ArrowLeft className="w-5 h-5 mr-2" />
         {pickdict.back}
       </Button>
     </div>:<></>
     }
-    <div className={`relative flex flex-col-reverse md:flex-row ${estimatedPrice? "mt-15 md:mt-25": "mt-15 md:mt-20 "} md:gap-10 md:mx-15 md:mb-10 h-max overflow-y-auto md:min-h-[82%] `}>
+    <div className={`relative flex flex-col-reverse lg:flex-row ${estimatedPrice? "mt-15 lg:mt-25": "mt-15 lg:mt-20 "} lg:gap-10 lg:mx-15 lg:mb-10 h-max overflow-y-auto lg:min-h-[82%] `}>
     {estimatedPrice ?
     <div className="relative container w-max">
       <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={estimatedPrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
     </div>
     :
-    <form className="relative inset-0 bg-white w-[100%] flex mt-[-20] md:mt-0 md:pt-15 md:p-8 md:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
+    <form className="relative inset-0 bg-white w-[100%] flex mt-[-20] lg:mt-0 lg:pt-15 lg:p-8 lg:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
       {error && 
         <>
           <div className="mb-4 py-3 w-70 bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
@@ -487,7 +497,7 @@ export default function PickupFor({
         </>
       }
       {(isPickingPickup || isPickingDestination) && (
-        <div className="mb-4 p-3 bg-orange-100 border-l-4 border-orange-500 rounded text-orange-800 text-center font-medium">
+        <div className="mb-4 p-3 bg-orange-100 w-full border-l-4 border-orange-500 rounded text-orange-800 text-center font-medium">
           {isPickingPickup
             ? `${pickdict.selectPickup}`
             : `${pickdict.selectDest}`}
@@ -881,7 +891,7 @@ export default function PickupFor({
     </form>
     }
     <div className="shadow-custom border-none relative inset-0 w-full h-full flex flex-col justify-center outline-none">
-      <div ref={mapContainer} className="w-full h-[400px] md:h-[85vh] md:rounded-lg outline-none" />
+      <div ref={mapContainer} className="w-full h-[400px] lg:h-[85vh] lg:rounded-lg outline-none" />
     </div>
     </div>
     </>

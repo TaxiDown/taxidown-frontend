@@ -131,6 +131,7 @@
   "selectPickup": "Haz clic en el mapa para seleccionar el lugar de recogida",
   "selectDest": "Haz clic en el mapa para seleccionar el destino",
   "failedEstimate": "No se pudo obtener una estimación del precio. Inténtalo de nuevo.",
+  "failed": "No se pudo obtener una estimación del precio. Por favor, seleccione ubicaciones válidas.",
   "fillFields": "Por favor, completa todos los campos.",
   "pickConfirm": "Confirmación de recogida",
   "details": "Revisa los detalles de tu recogida",

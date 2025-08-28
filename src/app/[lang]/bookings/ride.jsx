@@ -114,7 +114,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
                 className="text-red-600 rounded-lg flex items-center gap-1 text-lg cursor-pointer font-semibold"
                 onClick={() => {
                   setCancel(true);
-                  setShowCancel(false); // Optionally hide after clicking
+                  setShowCancel(false); 
                 }}
               >
                 <XCircleIcon className="w-4 h-4 text-red-600 font-semibold " />

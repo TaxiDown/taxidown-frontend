@@ -128,7 +128,6 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
             const response = await fetch(`/api/get_fleets`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
             })
             
             if (response.status === 200) {

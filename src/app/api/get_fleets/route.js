@@ -13,7 +13,8 @@ export async function GET() {
         });
         status = response.status
         const fleets =  await response.json();
-        if(response.status==200){
+        console.log(response)
+        if(response.status === 200 ){
             const res = NextResponse.json(fleets.results);
             return res
         }else{
