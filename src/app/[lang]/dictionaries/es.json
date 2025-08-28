@@ -142,6 +142,7 @@
   "cash": "Pago contra entrega",
   "credit": "Crédito",
   "confirm": "Confirmar reserva",
-  "rideCreated": "¡Viaje creado con éxito!"
+  "rideCreated": "¡Viaje creado con éxito!",
+  "error": "Se produjo un error al crear la reserva. Por favor, inténtelo de nuevo."
   }
 }

@@ -15,7 +15,7 @@ import PickLogin from "../home/pick_login"
 import SuccessModal from "../home/modal"
 
 export default function PickupDetails({pickupDict, pickup, destination, pickupCoords, destinationCoords, phone, pickupDate, pickupTime, price, returnPrice, numAdultSeats, numChildSeats, customerNote, returnDate,  returnTime, vehicleID, vehicleCategory, login, signup, lang} ) {
-   const router = useRouter();
+  const router = useRouter();
 
   const [IsLogin, setLogin] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -26,6 +26,8 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [buttonLoading, setButtonLoading] = useState(false);
+
+  const [error, setError] = useState("");
 
   const [pickupData, setPickupData] = useState({
     pickup: pickup,
@@ -117,11 +119,15 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
         console.log(data);
         setShowSuccess(true);
         setType('limit');
+        setButtonLoading(false);
         setTimeout(() => {
             setShowSuccess(false);
         }, 5000);
     }else if(response.status == 401){
         setLogin(true);
+        setButtonLoading(false);
+    }else{
+      setError(pickupDict.error);
     }
   };
   return (
@@ -135,6 +141,13 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
         <SuccessModal type={type} isGuest={isGuest}/>
     }
     <form className="flex items-center justify-center w-max" onSubmit={fetchData}>
+      {error && 
+          <>
+            <div className="mb-4 py-3 w-70 bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
+              {error}
+            </div>
+          </>
+        }
         <div className=" md:bg-white rounded-xl md:shadow p-6 w-90 md:w-120">
           <h2 className="text-lg font-semibold mb-1">{pickupDict.pickConfirm}</h2>
           <p className="text-sm text-gray-500 mb-4">{pickupDict.details}</p>

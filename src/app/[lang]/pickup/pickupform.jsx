@@ -394,6 +394,7 @@ export default function PickupFor({
       }
     } catch (err) {
         setError(`${pickdict.failedEstimate}`);
+        setButtonLoading(false);
     }
 
   }
@@ -691,7 +692,7 @@ export default function PickupFor({
         }
         {isOneWay && 
         <div className="w-90 flex items-center space-x-2 mt-5">
-          <Checkbox id="schedule" checked={showDateTime} className="w-5 h-5" onCheckedChange={setShowDateTime} />
+          <Checkbox id="schedule" checked={showDateTime} className="w-5 h-5" onCheckedChange={(e)=>{setShowDateTime(e); setReturnDate(null); setReturnTime("");}} />
           <label htmlFor="schedule" className="text-lg text-stone-800">
             {pickdict.addReturn}
           </label>

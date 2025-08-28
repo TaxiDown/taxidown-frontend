@@ -119,7 +119,7 @@
     "pickDate": "Pick a date",
     "time": "Time",
     "vehicleType": "Vehicle type",
-    "addReturn": "Add Return Way",
+    "addReturn": "Add Return Trip",
     "returnDate": "Return Date",
     "returnTime": "Return Time",
     "adults": "Adults",
@@ -141,6 +141,7 @@
     "cash": "Cash on Delivery",
     "credit": "Credit",
     "confirm": "Confirm Booking",
-    "rideCreated": "Ride Created Successfully!"
+    "rideCreated": "Ride Created Successfully!", 
+    "error": "An error occurred while creating the booking. Please try again."
   }
 }
