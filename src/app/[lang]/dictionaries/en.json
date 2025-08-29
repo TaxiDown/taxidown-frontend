@@ -144,6 +144,7 @@
     "confirm": "Confirm Booking",
     "rideCreated": "Ride Created Successfully!", 
     "error": "An error occurred while creating the booking. Please try again.",
-    "invalidPhone": "please enter a valid phone number"
+    "invalidPhone": "please enter a valid phone number",
+    "hourPrice": "Price Per Hour"
   }
 }

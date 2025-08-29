@@ -145,6 +145,7 @@
   "confirm": "Confirmar reserva",
   "rideCreated": "¡Viaje creado con éxito!",
   "error": "Se produjo un error al crear la reserva. Por favor, inténtelo de nuevo.",
-  "invalidPhone": "Por favor, introduzca un número de teléfono válido."
+  "invalidPhone": "Por favor, introduzca un número de teléfono válido.",
+  "hourPrice": "Precio por hora"
   }
 }

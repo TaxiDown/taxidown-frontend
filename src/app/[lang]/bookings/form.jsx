@@ -185,14 +185,14 @@ export default function BookingForm({ pickup, destination, dict, lang, rideText 
                   return (
                     <Ride
                       key={`ride-${ride.id}`}
-                      id={ride.booking.id}
+                      id={ride.id}
                       pickupText={pickup}
                       destinationText={destination}
                       pickup={pickupr}
                       destination={destinationr}
                       date={dater}
                       time={timer}
-                      status={ride.booking.status}
+                      status={ride.status}
                       price={ride.price}
                       ride={rideText}
                     />

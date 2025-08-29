@@ -68,6 +68,7 @@ export default function PickupDetails({
   // --------- validate token then submit --------------
   const fetchData = async (e) => {
     e.preventDefault();
+    setIsGuest(false);
     try {
       const response = await fetch("/api/validate_token", {
         method: "POST",
@@ -269,7 +270,7 @@ export default function PickupDetails({
             {/* Total Price */}
             <div className="w-full flex justify-between items-center pr-2 rounded-lg border-gray-200">
               <p className="text-orange-600 text-lg font-medium">
-                {pickupDict.totalPrice}
+                {pickupData.destination ? pickupDict.totalPrice : pickupDict.hourPrice}
               </p>
               <p className="text-orange-600 text-xl font-bold">
                 €
