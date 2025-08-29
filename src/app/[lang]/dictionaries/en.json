@@ -79,7 +79,8 @@
   },
    "unauthorized":{
     "error": "You are not authorized to view this page.",
-    "loginTitle": "Login"
+    "loginTitle": "Login",
+    "goHome": "Go to home page"
   },
    "confirmEmail":{
     "goLogin": "Go to Login", 

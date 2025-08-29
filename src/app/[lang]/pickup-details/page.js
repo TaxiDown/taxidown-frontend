@@ -7,7 +7,7 @@ export default async function PickupDetailsPage({params}) {
   const dict = await getDictionary(lang);
 
   return (
-    <div className="w-full h-full flex mt-30 justify-center ">
+    <div className="w-full h-full flex justify-center items-center">
       <Navbar home={dict.lang.home} contactUs={dict.lang.contactUs} loginTitle={dict.lang.loginTitle} bookingTitle={dict.lang.bookingTitle} logoutTitle={dict.lang.logoutTitle} successLogout={dict.lang.LogoutSuccessful} lang={lang} bg="white"/>
       <Card pickupDict={dict.pick}/>
     </div>

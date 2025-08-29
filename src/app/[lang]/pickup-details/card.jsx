@@ -73,8 +73,8 @@ export default function Card({pickupDict}) {
     }
   
     return (
-      <div className="flex items-center justify-center w-max shadow-custom " >
-          <div className=" md:bg-white rounded-xl md:shadow p-6 w-90 md:w-120">
+      <div className="flex items-center justify-center w-max" >
+          <div className=" md:bg-white rounded-xl md:shadow p-6 w-90 max-w-[95%] md:w-120">
           <h2 className="text-green-600 text-xl font-semibold mb-6">{pickupDict.rideCreated}</h2>
             
             <div className="space-y-4 m-4">
@@ -134,7 +134,7 @@ export default function Card({pickupDict}) {
               : <></>
               }
               <div className="w-full flex justify-between items-center pr-2 rounded-lg border-gray-200">
-                <p className="text-black text-lg font-medium">{pickupDict.totalPrice}</p>
+                <p className="text-black text-lg font-medium">{pickupData.destination ? pickupDict.totalPrice: pickupDict.hourPrice}</p>
                 <p className="text-black text-xl font-bold">€{pickupData.price}</p>
               </div>
             </div>

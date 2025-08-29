@@ -80,7 +80,8 @@
   },
   "unauthorized": {
     "error": "No estás autorizado para ver esta página.",
-    "loginTitle": "Iniciar sesión"
+    "loginTitle": "Iniciar sesión",
+    "goHome": "Ir a la página de inicio"
   },
   "confirmEmail": {
     "goLogin": "Ir a iniciar sesión",

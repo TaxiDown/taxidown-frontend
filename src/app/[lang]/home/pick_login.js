@@ -6,7 +6,7 @@ import Signupform from '../(auth)/signup/form';
 import SignupLogin from './form';
 import {X} from "lucide-react";
 
-export default function PickLogin({ login, signup, closeModal, lang, submit, isGuest }) {
+export default function PickLogin({ login, signup, closeModal, lang, submit, onGuest }) {
   const [isLogin, setLogin] = useState(false);
   const [isSignup, setSignup] = useState(false);
 
@@ -96,7 +96,7 @@ export default function PickLogin({ login, signup, closeModal, lang, submit, isG
             
             <div className="flex flex-col justify-start text-left mt-1">
               <button
-                onClick={(e) => { isGuest(); closeModal(); submit(e);}}
+                onClick={(e) => {closeModal(); submit(e, true);}}
                 className="h-11 text-white bg-black border border-stone-500 rounded-full text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black p-1"
               >
                 Continue as guest
