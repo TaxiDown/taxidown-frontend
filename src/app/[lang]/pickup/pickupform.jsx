@@ -110,13 +110,40 @@ export default function PickupFor({
   const isPickingPickupRef = useRef(false)
   const isPickingDestinationRef = useRef(false)
 
-  const [estimatedPrice, setEstimatedPrice] = useState("");
+  const [estimatedPrice, setEstimatedPrice] = useState(null);
 
   const [pickup, setPickup] = useState(null)
   const [destinationCoords, setDestinationCoords] = useState(null);
   
   const [phone, setPhone] = useState("");
 
+  const formRef = useRef(null);
+
+    // --------- utility: find nearest scrollable ancestor --------------
+    const getScrollableParent = (el) => {
+      if (!el) return document.scrollingElement || document.documentElement || document.body;
+      let parent = el;
+      while (parent && parent !== document.body) {
+        const style = window.getComputedStyle(parent);
+        const overflowY = style.overflowY;
+        const isScrollable = (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay");
+        if (isScrollable && parent.scrollHeight > parent.clientHeight) return parent;
+        parent = parent.parentElement;
+      }
+      return document.scrollingElement || document.documentElement || document.body;
+    };
+  
+    const scrollToTop = () => {
+      const scroller = getScrollableParent(formRef.current);
+      try {
+        scroller.scrollTo({ top: 0, behavior: "smooth" });
+        if (scroller === document.scrollingElement || scroller === document.documentElement || scroller === document.body) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      } catch {
+        window.scrollTo(0, 0);
+      }
+    };
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -366,26 +393,31 @@ export default function PickupFor({
     
     if (!pickupQuery  || !selectedDate || !selectedTime || !selectedFleetID || !phone) {
       setError(`${pickdict.fillFields}`);
+      scrollToTop();
       setButtonLoading(false);
       return;
     }else if(isOneWay && !destinationQuery){
       setError(`${pickdict.fillFields}`);
+      scrollToTop();
       setButtonLoading(false);
       return;
     }else if(showDateTime && (!returnDate || !returnTime)){
         setError(`${pickdict.fillFields}`);
+        scrollToTop();
         setButtonLoading(false);
         return;
     }else{
       if(!pickup){
         setValidPickup(false);
         setError("");
+        scrollToTop();
         setButtonLoading(false);
         return;
       }
-      if(!destinationCoords){
+      if(isOneWay && !destinationCoords){
         setValidDestination(false);
         setError("");
+        scrollToTop();
         setButtonLoading(false);
         return;
       }
@@ -426,15 +458,19 @@ export default function PickupFor({
          // router.push(`/${lang}/pickup-details?pickup=${pickupQuery}&destination=${destinationQuery}&pickCoords=${pickup.join(",")}&destinationCoords=${destinationCoords.join(",")}&phone=${phone}&pickupDate=${selectedDate}&pickupTime=${selectedTime}&price=${estimatedPrice[0]}&returnPrice=${estimatePrice[1]}&adults=${adults}&childern=${children}&note=${comment}&returnDate=${returnDate}&returnTime=${returnTime}&vehicleID=${selectedFleetID}&vehicle=${selectedFleetValue}`)
       }else if(res.status === 404){
         setError(pickdict.failed);
+        scrollToTop();
         setButtonLoading(false);
       } else {
         setError(`${pickdict.failedEstimate}`);
+        scrollToTop();
         setButtonLoading(false);
       }
     } catch (err) {
         setError(`${pickdict.failedEstimate}`);
+        scrollToTop();
         setButtonLoading(false);
     }
+
 
   }
 
@@ -476,7 +512,7 @@ export default function PickupFor({
     <>
     {estimatedPrice ?
       <div className="mb-4 relative ">
-      <Button variant="ghost" size="md" className={`bg-white p-2 lg:bg-transparent z-500 absolute top-0 left-2 cursor-pointer mt-16 lg:ml-10 text-md hover:border-black`} onClick={()=>{setEstimatedPrice(""); setButtonLoading(false);}}>
+      <Button variant="ghost" size="md" className={`bg-white p-2 lg:bg-transparent z-500 absolute top-0 left-2 cursor-pointer mt-16 lg:ml-10 text-md hover:border-black`} onClick={()=>{setEstimatedPrice(null); setButtonLoading(false);}}>
         <ArrowLeft className="w-5 h-5 mr-2" />
         {pickdict.back}
       </Button>
@@ -485,13 +521,13 @@ export default function PickupFor({
     <div className={`relative flex flex-col-reverse lg:flex-row ${estimatedPrice? "mt-15 lg:mt-25": "mt-15 lg:mt-20 "} lg:gap-10 lg:mx-15 lg:mb-10 h-max overflow-y-auto lg:min-h-[82%] `}>
     {estimatedPrice ?
     <div className="relative container w-max">
-      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={estimatedPrice[1]} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
+      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={isOneWay ? estimatedPrice[1] : null} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
     </div>
     :
-    <form className="relative inset-0 bg-white w-[100%] flex mt-[-20] lg:mt-0 lg:pt-15 lg:p-8 lg:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
+    <form ref={formRef} className="relative inset-0 bg-white w-[100%] flex mt-[-20] lg:mt-0 lg:pt-15 lg:p-8 lg:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
       {error && 
         <>
-          <div className="mb-4 py-3 w-70 bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
+          <div className="mb-4 py-3 w-full bg-red-100 border-l-4 border-red-500 rounded text-red-800 text-center font-medium">
             {error}
           </div>
         </>
@@ -654,7 +690,7 @@ export default function PickupFor({
           )}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 w-90">
+      <div className="grid grid-cols-2 gap-4 w-90 max-w-[85%]">
           <div className="w-full">
             <label className="block text-sm font-medium text-stone-800 mb-1">{pickdict.date}</label>
             <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -698,7 +734,7 @@ export default function PickupFor({
         </div>
         {
             Array.isArray(fleets) && fleets.length > 0 && (
-                <div className="w-90 mt-4 text-black text-lg">
+                <div className="w-90 max-w-[85%] mt-4 text-black text-lg">
                     <label className="block text-sm font-medium text-stone-800 mb-1">{pickdict.vehicleType}</label>
                     <Select onValueChange={handleValueChange} value={selectedFleetValue} className={cn('outline-none shadow-none')}>
                     <SelectTrigger className="w-full h-14 bg-white border-gray-200 outline-none focus:border-black text-2xl font-semibold ">
@@ -729,7 +765,7 @@ export default function PickupFor({
             )
         }
         {isOneWay && 
-        <div className="w-90 flex items-center space-x-2 mt-5">
+        <div className="w-90 max-w-[85%] flex items-center space-x-2 mt-5">
           <Checkbox id="schedule" checked={showDateTime} className="w-5 h-5" onCheckedChange={(e)=>{setShowDateTime(e); setReturnDate(null); setReturnTime("");}} />
           <label htmlFor="schedule" className="text-lg text-stone-800">
             {pickdict.addReturn}
@@ -737,7 +773,7 @@ export default function PickupFor({
         </div>
         }
         {showDateTime &&
-        <div className="grid grid-cols-2 gap-4 w-90 mt-2">
+        <div className="grid grid-cols-2 gap-4 w-90 max-w-[85%] mt-2">
         <div className="w-full">
           <label className="block text-sm font-medium text-stone-800 mb-1">{pickdict.returnDate}</label>
           <Popover open={returnCalendarOpen} onOpenChange={setReturnCalendarOpen}>
@@ -779,26 +815,26 @@ export default function PickupFor({
         </div>
       </div>
       }
-      <div className="flex gap-6 w-90 mt-5">
+      <div className="flex justify-center gap-3 md:gap-6 w-90 max-w-[85%] mt-5">
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center justify-end gap-1">
-          <User className="w-5 h-5 text-stone-700" />
+          <User className="w-4 h-4 md:w-5 md:h-5 text-stone-700" />
           <span className="text-lg font-bold text-stone-800">{pickdict.adults}</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setAdults((prev) => Math.max(1, prev - 1))}
-            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
+            className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Minus className="w-4 h-4" />
           </button>
-          <div className="w-max text-center py-1 px-2">{adults}</div>
+          <div className="w-max text-center py-1 md:px-2">{adults}</div>
           <button
             type="button"
             onClick={() => setAdults((prev) => prev + 1)}
-            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
+            className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -807,29 +843,29 @@ export default function PickupFor({
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
-          <Baby className="w-5 h-5 text-stone-600" />
+          <Baby className="w-4 h-4 md:w-5 md:h-5 text-stone-600" />
           <span className="text-lg font-medium text-stone-800">{pickdict.childern}</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
-            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
+            className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Minus className="w-4 h-4" />
           </button>
-          <div className="w-max text-center rounded-md py-1 px-2">{children}</div>
+          <div className="w-max text-center rounded-md py-1 md:px-2">{children}</div>
           <button
             type="button"
             onClick={() => setChildren((prev) => prev + 1)}
-            className="flex items-center justify-center w-7 h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
+            className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Plus className="w-4 h-4" />
           </button>
         </div>
       </div>
     </div>
-    <div className="flex flex-col w-90 mt-5">
+    <div className="flex flex-col w-90 max-w-[85%] mt-5">
       <label htmlFor="phone" className="block text-sm font-medium">
         Phone
       </label>
@@ -864,7 +900,7 @@ export default function PickupFor({
       )}
     </div>
 
-    <div className={`flex items-center w-90 mt-5 mb-[20px]`}>
+    <div className={`flex items-center w-90 max-w-[85%] mt-5 mb-[20px]`}>
       <MessageCircleMore className="h-6 w-6 text-gray-600" />
       <textarea
         id="comment"

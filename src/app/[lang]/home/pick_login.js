@@ -101,6 +101,7 @@ export default function PickLogin({ login, signup, closeModal, lang, submit, isG
               >
                 Continue as guest
               </button>
+              <p className='w-full text-center text-red-600 text-xs mt-1'>Guests cannot view or cancel their bookings</p>
             </div>
           </div>
         )}
