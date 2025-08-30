@@ -56,7 +56,8 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
         </div>
       </div> 
     }
-    <div className="flex max-w-5xl mx-auto bg-white rounded-2xl shadow p-10 border border-gray-200 w-[90%]">
+    <div className="flex flex-col sm:flex-row max-w-5xl mx-auto bg-white rounded-2xl shadow sm:p-10 p-2 py-5 border border-gray-200 w-[90%]  max-w-[90%]">
+      <div className='flex max-w-5xl mx-auto bg-white rounded-2xl w-full sm:w-[90%]'>
       <div className="flex flex-col items-center w-24 relative">
         <div className="text-center mb-2">
         </div>
@@ -76,7 +77,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           <p className="text-sm text-gray-500">{pickup}</p>
         </div>
         <div className=" text-sm text-gray-500">
-            <div className='flex gap-3 text-sm items-center'>
+            <div className='flex flex-col sm:flex-row gap-3 text-sm items-left'>
                 <div className='flex items-center'>
                     <CalendarDaysIcon size={16} className="mr-1 text-gray-600" />
                     <p>{date}</p>
@@ -95,10 +96,12 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           </div>
         }
       </div>
-      <div className='relative flex flex-col justify-between items-center min-w-max gap-3'>
+
+      </div>
+      <div className='relative flex flex-row sm:flex-col justify-between items-center min-w-max px-7 mt-3 gap-3'>
       {
           status == "Pending" &&
-          <div className="absolute top-0 right-[-15] inline-block text-left m-[-10px]">
+          <div className="absolute top-0 right-0 sm:right-[-15] inline-block text-left m-0 sm:m-[-10px]">
           {/* Three dots icon */}
           <button
             onClick={() => setShowCancel(!showCancel)}
@@ -106,6 +109,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           >
             <EllipsisVerticalIcon className="w-6 h-6" />
           </button>
+          
 
           {/* Cancel button shown conditionally */}
           {showCancel && (
@@ -124,6 +128,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
           )}
         </div>
         }
+
         <div className='flex items-center gap-1'>
           {getStatusIcon()}
            <p className={`font-semibold text-[17px] ${getStatusColor()}`}>{status}</p>
