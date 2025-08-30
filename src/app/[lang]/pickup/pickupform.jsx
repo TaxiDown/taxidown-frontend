@@ -445,6 +445,10 @@ export default function PickupFor({
         body.datetime_return = `${returnDate}T${returnTime}:00`;
       }
 
+      if(!isOneWay){
+        body.duration = duration * 3600;
+      }
+
       const res = await fetch(`/api/get_price`, {
           cache: "no-store",
           method: 'POST',

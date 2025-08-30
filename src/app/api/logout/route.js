@@ -20,7 +20,6 @@ export async function POST() {
     });
 
     if (response.status === 200) {
-      // Clear cookies on client
       cookieStore.delete('access');
       cookieStore.delete('refresh');
       cookieStore.delete('csrftoken');

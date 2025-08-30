@@ -13,7 +13,6 @@ export async function POST(request) {
     let cookieHeader2 = undefined;
 
     try{
-        console.log(body);
         const res = await fetch(`${process.env.API_URL}api/pricing/get-pricing/`,{
             cache: "no-store",
             method: 'POST',
@@ -23,7 +22,6 @@ export async function POST(request) {
             'Cookie': cookieHeader,
             },
         });
-        console.log(res);
         status = res.status
         if (res.status == 200){
             const price = await res.json(); 
