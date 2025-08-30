@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import Ride from "./ride"
 import NavbarStatic from "./nav_static"
 
-export default function BookingForm({ pickup, destination, dict, lang, rideText }) {
+export default function BookingForm({ pickup, destination, durationText, hour, hours, dict, lang, rideText }) {
   const router = useRouter()
   const [rides, setRides] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -182,12 +182,23 @@ export default function BookingForm({ pickup, destination, dict, lang, rideText 
                     ? ride.booking.datetime_return.split("T")[1].replace("Z", "")
                     : ride.booking.datetime_pickup.split("T")[1].replace("Z", "");
 
+                  const pickupCoords = isReturn
+                  ? ride.booking.dropoff_coordinates
+                  : ride.booking.pickup_coordinates;
+
+                  const dropCoords = isReturn
+                  ? ride.booking.pickup_coordinates
+                  : ride.booking.dropoff_coordinates;
+
                   return (
                     <Ride
                       key={`ride-${ride.id}`}
                       id={ride.id}
                       pickupText={pickup}
                       destinationText={destination}
+                      durationText={durationText}
+                      hours={hours}
+                      hour={hour}
                       pickup={pickupr}
                       destination={destinationr}
                       date={dater}
@@ -195,6 +206,9 @@ export default function BookingForm({ pickup, destination, dict, lang, rideText 
                       status={ride.status}
                       price={ride.price}
                       ride={rideText}
+                      pickupCoords = {pickupCoords}
+                      dropCoords = {dropCoords}
+                      duration={Number(ride.duration.substring(0,2))}
                     />
                   );
                 })}

@@ -9,9 +9,11 @@ import {
   } from "lucide-react";
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'; // For the three dots icon
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Timer } from 'lucide-react';
 
 
-export default function Ride({pickupText, destinationText, pickup, destination, date, time, price, status, vehicle, id, ride}) {
+export default function Ride({pickupText, destinationText, hour, hours, durationText, pickup, destination, date, time, price, status, vehicle, id, ride, pickupCoords, dropCoords, duration}) {
   const [showCancel, setShowCancel] = useState(false);
 
   const [cancel, setCancel] = useState(false);
@@ -74,7 +76,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
       <div className="flex-3/2 pl-6 space-y-2">
         <div>
           <p className="font-semibold">{pickupText}</p>
-          <p className="text-sm text-gray-500">{pickup}</p>
+          <a href={`https://www.google.com/maps?q=${pickupCoords[1]},${pickupCoords[0]}`} className="block text-sm text-gray-500 cursor-pointer hover:text-gray-800" target="_blank" title='Show location on the map.'>{pickup}</a>
         </div>
         <div className=" text-sm text-gray-500">
             <div className='flex flex-col sm:flex-row gap-3 text-sm items-left'>
@@ -88,11 +90,18 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
                 </div>
             </div>
         </div>
+        {! destination &&
+        <div className="flex items-center space-x-3">
+          <Timer size={18} className="mr-1" />
+            <p className="font-medium">{durationText}</p>
+            <p className="text-gray-600">{duration} {duration == 1 ? hour: hours}</p>
+        </div>
+        }
         {
           destination &&
           <div>
             <p className="font-semibold">{destinationText}</p>
-            <p className="text-sm text-gray-500">{destination}</p>
+            <a href={`https://www.google.com/maps?q=${dropCoords[1]},${dropCoords[0]}`} className="block text-sm text-gray-500 cursor-pointer hover:text-gray-800" target="_blank" title='Show location on the map.'>{destination}</a>
           </div>
         }
       </div>
