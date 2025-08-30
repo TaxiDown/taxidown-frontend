@@ -25,6 +25,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { Timer } from "lucide-react";
 
 const schema = z.object({
   phone: z
@@ -95,6 +96,8 @@ export default function PickupFor({
   const [returnTime, setReturnTime] = useState("");
 
   const [showDateTime, setShowDateTime] = useState(false)
+
+  const [duration, setDuration] = useState(1);
 
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -521,7 +524,7 @@ export default function PickupFor({
     <div className={`relative flex flex-col-reverse lg:flex-row ${estimatedPrice? "mt-15 lg:mt-25": "mt-15 lg:mt-20 "} lg:gap-10 lg:mx-15 lg:mb-10 h-max overflow-y-auto lg:min-h-[82%] `}>
     {estimatedPrice ?
     <div className="relative container w-max">
-      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={isOneWay ? estimatedPrice[1] : null} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} login = {login} signup={signup} lang={lang}/>
+      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={isOneWay ? estimatedPrice[1] : null} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} duration={!isOneWay ? duration : null} login = {login} signup={signup} lang={lang}/>
     </div>
     :
     <form ref={formRef} className="relative inset-0 bg-white w-[100%] flex mt-[-20] lg:mt-0 lg:pt-15 lg:p-8 lg:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
@@ -732,6 +735,31 @@ export default function PickupFor({
             />
           </div>
         </div>
+        {!isOneWay &&
+        <div className="flex items-center justify-between gap-2 w-90 max-w-[85%] mt-4 ">
+          <div className="flex items-center justify-end gap-2">
+            <Timer className="w-6 h-6 text-stone-700" />
+            <p className="text-[17px] font-medium text-stone-800">{pickdict.duration}</p>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setDuration((prev) => Math.max(1, prev - 1))}
+              className={`flex items-center ${duration == 1 ? "cursor-not-allowed text-stone-400 border-stone-100" : "border-stone-200 hover:bg-stone-200 font-bold"} justify-center w-7 h-7 border-2 rounded-sm`}
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <div className="w-max text-center py-1 px-2 font-medium">{duration}</div>
+            <button
+              type="button"
+              onClick={() => setDuration((prev) => Math.min(12, prev + 1))}
+              className={`flex items-center ${duration == 12 ? "cursor-not-allowed text-stone-400 border-stone-100" : "border-stone-200 hover:bg-stone-200 font-bold"} justify-center w-7 h-7 border-2 rounded-sm`}
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+        }
         {
             Array.isArray(fleets) && fleets.length > 0 && (
                 <div className="w-90 max-w-[85%] mt-4 text-black text-lg">

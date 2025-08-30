@@ -13,8 +13,9 @@ import {
   } from "@/components/ui/radio-group"
 import PickLogin from "../home/pick_login"
 import SuccessModal from "../home/modal"
+import { Timer } from "lucide-react"
 
-export default function PickupDetails({pickupDict, pickup, destination, pickupCoords, destinationCoords, phone, pickupDate, pickupTime, price, returnPrice, numAdultSeats, numChildSeats, customerNote, returnDate,  returnTime, vehicleID, vehicleCategory, login, signup, lang} ) {
+export default function PickupDetails({pickupDict, pickup, destination, pickupCoords, destinationCoords, phone, pickupDate, pickupTime, price, returnPrice, numAdultSeats, numChildSeats, customerNote, returnDate,  returnTime, vehicleID, vehicleCategory, login, signup, lang, duration} ) {
   const router = useRouter();
 
   const [IsLogin, setLogin] = useState(false);
@@ -45,7 +46,8 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
     numChildSeats: numChildSeats,
     returnDate: returnDate,
     returnTime: returnTime,
-    customerNote: customerNote
+    customerNote: customerNote,
+    duration:duration
   })
 
   const [paymentCash, setPaymentCash] = useState("cash");
@@ -130,6 +132,8 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
     if (returnPrice){
       body.return_ride =  true;
       body.datetime_return = `${pickupData.returnDate}T${pickupData.returnTime}:00`;
+    }if(pickupData.duration){
+      body.duration = pickupData.duration * 3600;
     }
     const response = await fetch(`/api/create_ride`,{
         method: 'POST',
@@ -153,7 +157,7 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
         }, 4000);
         }else{
           console.log("Nooooooooo")
-          router.push(`/${lang}/pickup-details?pickup=${pickupData.pickup}&destination=${pickupData.destination}&phone=${pickupData.phone}&pickupDate=${pickupData.pickupDate}&pickupTime=${pickupData.pickupTime}&price=${totalPrice}&returnDate=${pickupData.returnDate}&returnTime=${pickupData.returnTime}&vehicle=${pickupData.vehicleCategory}`)
+          router.push(`/${lang}/pickup-details?pickup=${pickupData.pickup}&destination=${pickupData.destination}&phone=${pickupData.phone}&pickupDate=${pickupData.pickupDate}&pickupTime=${pickupData.pickupTime}&price=${totalPrice}&returnDate=${pickupData.returnDate}&returnTime=${pickupData.returnTime}&vehicle=${pickupData.vehicleCategory}&duration=${duration}`)
         }
     }else if (response.status == 429){
         console.log(data);
@@ -244,7 +248,17 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
                 <p className="text-gray-600">{pickupData.pickupDate}{'\u00A0'}{'\u00A0'}{'\u00A0'}{pickupData.pickupTime}</p>
               </div>
             </div>
-
+            {duration &&
+              <div className="flex items-center justify-between gap-2 w-full mt-4 ">
+                <div className="flex items-center justify-end gap-2">
+                  <Timer className="w-6 h-6 text-stone-700" />
+                  <p className="text-[17px] font-medium text-stone-800">{pickupDict.duration}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <p className="text-black text-lg font-bold">{pickupData.duration} {pickupData.duration == 1 ? pickupDict.hour : pickupDict.hours}</p>
+                </div>
+              </div>
+            }
             
             {pickupData.returnPrice ?
             <div className="flex items-center space-x-3">
@@ -267,10 +281,10 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
                         <RadioGroupItem value="cash" id="r2" />
                         <label htmlFor="r2">{pickupDict.cash}</label>
                     </div>
-                    <div className={`flex items-center gap-3 p-3 rounded-lg border border-gray-200 ${paymentCash==="credit" ? "border-2 border-gray-700": ""}`}>
+                    {/*<div className={`flex items-center gap-3 p-3 rounded-lg border border-gray-200 ${paymentCash==="credit" ? "border-2 border-gray-700": ""}`}>
                         <RadioGroupItem value="credit" id="r3" />
                         <label htmlFor="r3">{pickupDict.credit}</label>
-                    </div>
+                    </div>*/}
                 </RadioGroup>
             </div>
             <Button className="w-full cursor-pointer text-white rounded-lg text-[17px] p-3 py-5 bg-orange-500 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black min-w-max" type="submit">

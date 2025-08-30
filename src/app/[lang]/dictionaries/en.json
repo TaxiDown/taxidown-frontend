@@ -146,6 +146,9 @@
     "rideCreated": "Ride Created Successfully!", 
     "error": "An error occurred while creating the booking. Please try again.",
     "invalidPhone": "please enter a valid phone number",
-    "hourPrice": "Price Per Hour"
+    "hourPrice": "Price Per Hour",
+    "duration": "Trip Duration",
+    "hour": "hour",
+    "hours": "hours"
   }
 }
