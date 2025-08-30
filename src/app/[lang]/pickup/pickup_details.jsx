@@ -271,7 +271,7 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
             : <></>
             }
             <div className="w-full flex justify-between items-center pr-2 rounded-lg border-gray-200">
-              <p className="text-orange-600 text-lg font-medium">{pickupData.destination ? pickupDict.totalPrice: pickupDict.hourPrice}</p>
+              <p className="text-orange-600 text-lg font-medium">{pickupDict.totalPrice}</p>
               <p className="text-orange-600 text-xl font-bold">€{Number(pickupData.price) + Number(pickupData.returnPrice)}</p>
             </div>
             <div>
