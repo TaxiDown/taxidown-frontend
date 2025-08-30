@@ -98,7 +98,7 @@ export default function Ride({pickupText, destinationText, pickup, destination, 
       </div>
 
       </div>
-      <div className='relative flex flex-row sm:flex-col justify-between items-center min-w-max px-7 mt-3 gap-3'>
+      <div className='relative flex sm:flex-col justify-between items-center min-w-max px-7 mt-3 gap-3'>
       {
           status == "Pending" &&
           <div className="absolute top-0 right-0 sm:right-[-15] inline-block text-left m-0 sm:m-[-10px]">

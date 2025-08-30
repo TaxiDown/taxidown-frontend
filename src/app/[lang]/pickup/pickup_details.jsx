@@ -249,15 +249,13 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
               </div>
             </div>
             {duration &&
-              <div className="flex items-center justify-between gap-2 w-full mt-4 ">
-                <div className="flex items-center justify-end gap-2">
-                  <Timer className="w-6 h-6 text-stone-700" />
-                  <p className="text-[17px] font-medium text-stone-800">{pickupDict.duration}</p>
-                </div>
-                <div className="flex items-center gap-1">
-                  <p className="text-black text-lg font-bold">{pickupData.duration} {pickupData.duration == 1 ? pickupDict.hour : pickupDict.hours}</p>
-                </div>
+              <div className="flex items-center space-x-3">
+              <Timer className="w-6 h-6 text-stone-700" />
+              <div>
+                <p className="font-medium">{pickupDict.duration}</p>
+                <p className="text-gray-600">{pickupData.duration} {pickupData.duration ==1 ? pickupDict.hour : pickupDict.hours}</p>
               </div>
+            </div>
             }
             
             {pickupData.returnPrice ?
