@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-green-50: oklch(0.982 0.018 155.826);
+  --color-green-100: oklch(0.962 0.044 156.743);
+  --color-green-200: oklch(0.925 0.084 155.995);
+  --color-green-300: oklch(0.871 0.15 154.449);
+  --color-green-400: oklch(0.792 0.209 151.711);
 }
 
 
@@ -157,7 +162,7 @@ ul{
 }
 
 .pickup{
-  width: 340px;
+  width: 300px;
   height: 40px;
   margin-bottom: 0;
   padding-right: 34px;

@@ -1,7 +1,8 @@
 'use server';
 
 
-export default async function CreateAccount({email, password, password2, firstname, lastname, phone}) {
+export default async function CreateAccount({email, password, password2, firstname, lastname}) {
+  let status = null;
   try{
     const res = await fetch(`${process.env.API_URL}api/auth/registration/`, {
       method: 'POST',
@@ -11,15 +12,15 @@ export default async function CreateAccount({email, password, password2, firstna
         'password2':password2,
         'first_name': firstname,
         'last_name': lastname,
-        'phone_number': phone,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-      return res.status;
+      status = res.status;
+      return status;
   }
   catch (err) {
-    return res.status;
+    return status;
   }
 }

@@ -13,7 +13,6 @@ export default function Signupform({signup, lang}) {
     password2:"",
     firstname: "",
     lastname: "",
-    phone: "",
   }
   const router = useRouter();
   const [response, setresponse] = useState('')
@@ -51,7 +50,6 @@ export default function Signupform({signup, lang}) {
     const password2 = confirmationPassword;
     const firstname = data.firstname;
     const lastname = data.lastname;
-    const phone = data.phone;
 
     console.log(isValidEmail(email));
     if (!isValidEmail(email)) {
@@ -61,7 +59,7 @@ export default function Signupform({signup, lang}) {
     }else
       setValidEmail(true);
 
-    const res = await CreateAccount({email, password, password2, firstname, lastname, phone});
+    const res = await CreateAccount({email, password, password2, firstname, lastname});
     setCode(res);
     switch (res) {
       case 201 :
@@ -232,20 +230,8 @@ return (
           >{signup.lname}*</label>
           
       </div>
-      <div className='input-wrapper'>
-          <input type="text" 
-              onChange = {handelChange}
-              value = {data.phone}
-              id="phone"
-              className='input'
-              name = 'phone'
-              required
-          />
-          <label htmlFor="phone" className="label"
-          >{signup.phone}*</label>
-      </div>
       <div className='mt-3 flex flex-col gap-2 items-center justify-items-center max'>
-        <button className={data.firstname && data.lastname && data.phone ? 'cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 w-max transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-max' : 'w-max cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[16px] p-3 w-max border-2 border-[#ccc]'} type='submit'>
+        <button className={data.firstname && data.lastname ? 'cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 w-max transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-max' : 'w-max cursor-not-allowed bg-[#ddd] text-[#888] rounded-sm text-[16px] p-3 w-max border-2 border-[#ccc]'} type='submit'>
         {signup.createAccount}
         </button>
         <button className='cursor-pointer bg-[#f5f5f5] text-[#262626] rounded-sm text-[19px] p-5 pt-2 pb-2 w-35 border border-[#ccc] transition-transform duration-300 hover:scale-105 hover:bg-[#e0e0e0] hover:border-[#bbb]' onClick={prevPage}>

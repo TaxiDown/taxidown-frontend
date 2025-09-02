@@ -18,12 +18,10 @@ export async function POST(request) {
     
         if (result.status === 200 && access) {
           cookieHeader2 = result.setCookie;
-        } else {
-          return NextResponse.json({ message: 'Unauthorized' }, { status : 401 });
         }
     }if(access){
         try{
-            const response = await fetch(`${process.env.API_URL}/api/trips/bookings/`,{
+            const response = await fetch(`${process.env.API_URL}api/trips/bookings/`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -31,18 +29,35 @@ export async function POST(request) {
                 },
                 body: JSON.stringify(body),
             });
-            if(response.ok){
-                const res = NextResponse.json({status : 200 });
+            const jsonResponse = await response.json()
+            if(response.status === 201){
+                const res = NextResponse.json({ message: 'Ride created successfully' },{status : response.status });
                 if (cookieHeader2){
                     res.headers.set('Set-Cookie', cookieHeader2)
                 }
                 return res
             }
-            return NextResponse.json({status: response.status})
+            return NextResponse.json({ message: jsonResponse },{status: response.status})
         }catch(err){
-                return NextResponse.json({ message: err }, { status: response.status })
+                return NextResponse.json({ message: err }, { status: 500 })
         }
     }else{
-        return NextResponse.json({ message: 'Unauthorized' }, { status : 401 });
+        try{
+            const response = await fetch(`${process.env.API_URL}api/trips/bookings/`,{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
+            const jsonResponse = await response.json();
+            if(response.status === 201 ){
+                const res = NextResponse.json({ message: 'Ride created successfully' },{status :  response.status });
+                return res
+            }
+            return NextResponse.json({ message: jsonResponse }, {status: response.status})
+        }catch(err){
+                return NextResponse.json({ message: err }, { status: 500 })
+        }
     }
 }

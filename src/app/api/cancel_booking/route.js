@@ -22,7 +22,7 @@ export async function POST(request) {
         }
     }if(access){
         try{
-            const response = await fetch(`${process.env.API_URL}/api/trips/bookings/${body.id}/cancel/`,{
+            const response = await fetch(`${process.env.API_URL}/api/trips/rides/${body.id}/cancel/`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',

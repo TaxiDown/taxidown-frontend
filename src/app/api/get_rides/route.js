@@ -23,7 +23,7 @@ export async function GET() {
     }
     if(access){
         try{
-            const response = await fetch(`${process.env.API_URL}/api/trips/rides/`, {
+            const response = await fetch(`${process.env.API_URL}api/trips/rides/`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',

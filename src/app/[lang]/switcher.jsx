@@ -93,7 +93,7 @@ export default function LanguageSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[100px] z-50 animate-in slide-in-from-top-2 duration-200">
+        <div className="absolute top-full left-0 sm:right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[100px] z-50 animate-in slide-in-from-top-2 duration-200">
           {languages.map((language) => (
             <button
               key={language.code}

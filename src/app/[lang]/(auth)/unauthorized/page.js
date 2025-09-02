@@ -12,8 +12,11 @@ export default async function UnauthorizedPage({params}) {
           <p className="text-lg">{dict.unauthorized.error}</p>
         </div>
       </div>
-      <Link href={`/${lang}/login`} className="text-white mt-7 py-3 px-6 bg-black inline-block rounded-md text-lg">
+      <Link href={`/${lang}/login`} className="text-white mt-7 py-3 px-6 bg-black inline-block rounded-md text-lg hover:border-2 hover:bg-white hover:text-black hover:border-black">
         {dict.unauthorized.loginTitle}
+      </Link>
+      <Link href={`/${lang}/`} className="text-gray-600 mt-2 px-6 inline-block rounded-md text-sm hover:text-black">
+        {dict.unauthorized.goHome}
       </Link>
     </div>
   );

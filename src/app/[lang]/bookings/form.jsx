@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import Ride from "./ride"
 import NavbarStatic from "./nav_static"
 
-export default function BookingForm({ pickup, destination, dict, lang, rideText }) {
+export default function BookingForm({ pickup, destination, durationText, hour, hours, dict, lang, rideText }) {
   const router = useRouter()
   const [rides, setRides] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -50,6 +50,7 @@ export default function BookingForm({ pickup, destination, dict, lang, rideText 
         if (response.status === 200) {
           const data = await response.json()
           setRides(data)
+          console.log(data);
         } else {
           router.push(`/${lang}/unauthorized`)
         }
@@ -162,21 +163,56 @@ export default function BookingForm({ pickup, destination, dict, lang, rideText 
               </div>
             ) : (
               <div className="mb-20 w-full space-y-7">
-                {rides.map((ride) => (
-                  <Ride
-                    key={`ride ${ride.id}`}
-                    id={ride.booking.id}
-                    pickupText={pickup}
-                    destinationText={destination}
-                    pickup={ride.booking.pickup_location}
-                    destination={ride.booking.dropoff_location}
-                    date={ride.booking.datetime_pickup.split("T")[0]}
-                    time={ride.booking.datetime_pickup.split("T")[1].replace("Z", "")}
-                    status={ride.booking.status}
-                    price={ride.price}
-                    ride={rideText}
-                  />
-                ))}
+                {rides.map((ride) => {
+                  const isReturn = ride.return_ride;
+
+                  const pickupr = isReturn
+                    ? ride.booking.dropoff_location
+                    : ride.booking.pickup_location;
+
+                  const destinationr = isReturn
+                    ? ride.booking.pickup_location
+                    : ride.booking.dropoff_location;
+
+                  const dater = isReturn
+                    ? ride.booking.datetime_return.split("T")[0]
+                    : ride.booking.datetime_pickup.split("T")[0];
+
+                  const timer = isReturn
+                    ? ride.booking.datetime_return.split("T")[1].replace("Z", "")
+                    : ride.booking.datetime_pickup.split("T")[1].replace("Z", "");
+
+                  const pickupCoords = isReturn
+                  ? ride.booking.dropoff_coordinates
+                  : ride.booking.pickup_coordinates;
+
+                  const dropCoords = isReturn
+                  ? ride.booking.pickup_coordinates
+                  : ride.booking.dropoff_coordinates;
+
+                  return (
+                    <Ride
+                      key={`ride-${ride.id}`}
+                      id={ride.id}
+                      pickupText={pickup}
+                      destinationText={destination}
+                      durationText={durationText}
+                      hours={hours}
+                      hour={hour}
+                      pickup={pickupr}
+                      destination={destinationr}
+                      date={dater}
+                      time={timer}
+                      status={ride.status}
+                      price={ride.price}
+                      ride={rideText}
+                      pickupCoords = {pickupCoords}
+                      dropCoords = {dropCoords}
+                      duration={Number(ride.duration.substring(0,2))}
+                    />
+                  );
+                })}
+
               </div>
             )}
           </div>
