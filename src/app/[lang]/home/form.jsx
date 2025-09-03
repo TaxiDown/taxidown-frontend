@@ -142,12 +142,12 @@ export default function SignupLogin({ signup, onSuccess, submit }) {
 
             {!Object.values(validations).every(Boolean) ? (
               data.password && (
-                <ul className="alert-container">
-                  <li className={validations.length ? 'true' : 'false'}>{signup.passwordLength}</li>
-                  <li className={validations.uppercase ? 'true' : 'false'}>{signup.passwordUpper}</li>
-                  <li className={validations.lowercase ? 'true' : 'false'}>{signup.passwordLower}</li>
-                  <li className={validations.number ? 'true' : 'false'}>{signup.passwordNumber}</li>
-                  <li className={validations.special ? 'true' : 'false'}>{signup.passwordSpecial}</li>
+                <ul className="alert-container list-none p-0 mt-[-10px] mr-[15px] mb-[10px] ml-[15px]">
+                  <li className={`${validations.length ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{signup.passwordLength}</li>
+                  <li className={`${validations.uppercase ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{signup.passwordUpper}</li>
+                  <li className={`${validations.lowercase ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{signup.passwordLower}</li>
+                  <li className={`${validations.number ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{signup.passwordNumber}</li>
+                  <li className={`${validations.special ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{signup.passwordSpecial}</li>
                 </ul>
               )
             ) : (

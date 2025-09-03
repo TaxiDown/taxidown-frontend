@@ -218,15 +218,16 @@ export default function PickupFor({
     }
   }
 
-  // Get GPS location
-  /*useEffect(() => {
+  const getLocation = (setCoords, query, setID)=>{
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const coords = [pos.coords.longitude, pos.coords.latitude]
         setCenter(coords)
+        setCoords(coords)
+        reverseGeocode(coords, query, setID)
       })
     }
-  }, [isOneWay])*/
+  }
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return
@@ -584,8 +585,8 @@ export default function PickupFor({
           }
         </div>
         <div className="flex-1 space-y-4">
-          <div ref={pickupRef} className="relative w-full max-w-[95%]">
-            <div className={`relative mb-[20px] ${!validPickup ? "border-red-500" : ""}`}>
+          <div ref={pickupRef} className="relative w-full max-w-[95%] mb-0">
+            <div className={`relative ${!validPickup ? "border-red-500" : ""}`}>
               <input
                 type="text"
                 id="pickup"
@@ -611,6 +612,8 @@ export default function PickupFor({
                 <MapPinIcon className={`h-5 w-5 ${isPickingPickup ? "w-7 h-7 text-green-700 bg-green-200 rounded-full p-1" : "text-gray-500 hover:text-green-700"}`} />
               </button>
             </div>
+            <button onClick={()=>{getLocation(setPickup, setPickupQuery, setPickupID)}} className="p-0 m-0 mt-2 text-xs h-max text-stone-600 hover:text-stone-900 text-center w-full cursor-pointer">Choose your Current Location</button>
+
             {!validPickup && (
               <div className="text-center m-auto mb-3 flex items-center justify-center text-red-600 w-full">
                 {pickdict.chooseValidP}

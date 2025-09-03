@@ -163,12 +163,12 @@ return (
       {!Object.values(validations).every(Boolean) ?
       <>
       {data.password && 
-      <ul className='alert-container'>
-      <li className={validations.length ? "true" : "false"}>Must be at least 8 characters long</li>
-      <li className={validations.uppercase ? "true" : "false"}>Includes at least one uppercase</li>
-      <li className={validations.lowercase ? "true" : "false"}>Includes at least one lowercase</li>
-      <li className={validations.number ? "true" : "false"}>Contains numbers</li>
-      <li className={validations.special ? "true" : "false"}>special characters</li>
+      <ul className='alert-container  list-none p-0 mt-[-10px] mr-[15px] mb-[10px] ml-[15px]'>
+      <li className={`${validations.length ? "true" : "false"} pl-[23px] block text-center text-[13px]`}>Must be at least 8 characters long</li>
+      <li className={`${validations.uppercase ? "true" : "false"} pl-[23px] block text-center text-[13px]`}>Includes at least one uppercase</li>
+      <li className={`${validations.lowercase ? "true" : "false"} pl-[23px] block text-center text-[13px]`}>Includes at least one lowercase</li>
+      <li className={`${validations.number ? "true" : "false"} pl-[23px] block text-center text-[13px]`}>Contains numbers</li>
+      <li className={`${validations.special ? "true" : "false"} pl-[23px] block text-center text-[13px]`}>special characters</li>
       </ul>} </>
       :
       <div className='input-wrapper'>

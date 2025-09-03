@@ -25,12 +25,10 @@ export default function Footer() {
           </div>
         </div>
 
-      <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+      <div className="border-t border-gray-800 mt-10 mx-5 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
         <p>© 2025 ALL RIGHTS RESERVED</p>
         <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="#">PRIVACY POLICY</a>
-          <a href="#">DISCLAIMER</a>
-          <a href="#">TERMS OF USE</a>
+          <a href="/en/terms">TERMS OF USE</a>
         </div>
       </div>
     </footer>

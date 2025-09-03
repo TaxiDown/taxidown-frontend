@@ -87,12 +87,12 @@ export default function ResetClient({ dict, lang }) {
         {!Object.values(validations).every(Boolean) ? (
           <>
             {password && (
-              <ul className="alert-container">
-                <li className={validations.length ? 'true' : 'false'}>{dict.resetPassword.validations.length}</li>
-                <li className={validations.uppercase ? 'true' : 'false'}>{dict.resetPassword.validations.uppercase}</li>
-                <li className={validations.lowercase ? 'true' : 'false'}>{dict.resetPassword.validations.lowercase}</li>
-                <li className={validations.number ? 'true' : 'false'}>{dict.resetPassword.validations.number}</li>
-                <li className={validations.special ? 'true' : 'false'}>{dict.resetPassword.validations.special}</li>
+              <ul className="alert-container  list-none p-0 mt-[-10px] mr-[15px] mb-[10px] ml-[15px]">
+                <li className={`${validations.length ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{dict.resetPassword.validations.length}</li>
+                <li className={`${validations.uppercase ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{dict.resetPassword.validations.uppercase}</li>
+                <li className={`${validations.lowercase ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{dict.resetPassword.validations.lowercase}</li>
+                <li className={`${validations.number ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{dict.resetPassword.validations.number}</li>
+                <li className={`${validations.special ? 'true' : 'false'} pl-[23px] block text-center text-[13px]`}>{dict.resetPassword.validations.special}</li>
               </ul>
             )}
           </>
