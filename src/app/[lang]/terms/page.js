@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Navbar from "../home/nav";
 import { getDictionary } from '../dictionaries'
 
