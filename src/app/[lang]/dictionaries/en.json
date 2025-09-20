@@ -149,6 +149,8 @@
     "hourPrice": "Price Per Hour",
     "duration": "Trip Duration",
     "hour": "hour",
-    "hours": "hours"
+    "hours": "hours", 
+    "services" : "Choose one of our services",
+    "ourServices": "Our Services"
   }
 }

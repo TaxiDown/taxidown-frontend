@@ -209,6 +209,7 @@ export default function BookingForm({ pickup, destination, durationText, hour, h
                       pickupCoords = {pickupCoords}
                       dropCoords = {dropCoords}
                       duration={Number(ride.duration.substring(0,2))}
+                      number={ride.booking.booking_number}
                     />
                   );
                 })}

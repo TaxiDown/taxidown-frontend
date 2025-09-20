@@ -232,7 +232,7 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
             }
             </div>
            </div>
-            
+            {phone ?
             <div className="flex items-center space-x-3">
               <Phone className="w-5 h-5 text-gray-700" />
               <div>
@@ -240,7 +240,7 @@ export default function PickupDetails({pickupDict, pickup, destination, pickupCo
                 <p className="text-gray-600">{pickupData.phone || "Not provided"}</p>
               </div>
             </div>
-
+            :<></>}
             <div className="flex items-center space-x-3">
               <Calendar className="w-5 h-5 text-gray-700" />
               <div>

@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useRef } from "react" // Fixed import syntax
 import { MapPinIcon, ClockIcon, TruckIcon, CalendarIcon } from "@heroicons/react/24/solid"
-import { MessageCircleMore, ArrowLeft } from "lucide-react";
+import { MessageCircleMore, ArrowLeft, Mail } from "lucide-react";
 import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
@@ -23,9 +23,10 @@ import { Phone } from "lucide-react";
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import PhoneInput ,{isValidPhoneNumber, parsePhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { Timer } from "lucide-react";
+import Child from "./child";
 
 const schema = z.object({
   phone: z
@@ -118,9 +119,19 @@ export default function PickupFor({
   const [pickup, setPickup] = useState(null)
   const [destinationCoords, setDestinationCoords] = useState(null);
   
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+34");
 
   const formRef = useRef(null);
+
+  const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(true);
+
+  const [isValid, setIsValid] = useState(false);
+
+
+  function isValidEmail(email) {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/i.test(email);
+  }
 
     // --------- utility: find nearest scrollable ancestor --------------
     const getScrollableParent = (el) => {
@@ -394,8 +405,12 @@ export default function PickupFor({
     e.preventDefault();
     setError("");
     setButtonLoading(true);
-    
-    if (!pickupQuery  || !selectedDate || !selectedTime || !selectedFleetID || !phone) {
+    let localNumber = "";
+    if (typeof phone === "string" && phone.trim() !== "") {
+      const phoneNumber = parsePhoneNumber(phone) ;
+      localNumber = phoneNumber?.nationalNumber || "";
+    }
+    if (!pickupQuery  || !selectedDate || !selectedTime || !selectedFleetID || (!localNumber && !email)) {
       setError(`${pickdict.fillFields}`);
       scrollToTop();
       setButtonLoading(false);
@@ -426,10 +441,18 @@ export default function PickupFor({
         return;
       }
     }
-    const isValid = await trigger("phone");
-    if(!isValid){ 
+
+    if((!email && !localNumber )){ 
       setButtonLoading(false);
       return;
+    }else if(localNumber){
+      setIsValid(await trigger("phone"));
+      if(!isValid){
+        setButtonLoading(false);
+        return;
+      }
+    }else{
+      setPhone("")
     }
     setError("");
     try {
@@ -515,6 +538,12 @@ export default function PickupFor({
     }
   }
 
+  const [childSeats, setChildSets] = useState([]);
+  const [childVisibility, setChildVisiblity] = useState(false);
+
+  useEffect(()=>{
+    console.log(childSeats)
+  }, [childSeats])
   
   return (
     <>
@@ -529,7 +558,7 @@ export default function PickupFor({
     <div className={`relative flex flex-col-reverse lg:flex-row ${estimatedPrice? "mt-15 lg:mt-25": "mt-15 lg:mt-20 "} lg:gap-10 lg:mx-15 lg:mb-10 h-max overflow-y-auto lg:min-h-[82%] `}>
     {estimatedPrice ?
     <div className="relative container w-max">
-      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={isOneWay ? estimatedPrice[1] : null} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} duration={!isOneWay ? duration : null} login = {login} signup={signup} lang={lang}/>
+      <PickupDetails pickupDict={pickdict} pickup={pickupQuery} destination={destinationQuery} pickupCoords={pickup} destinationCoords={destinationCoords} phone={phone ? phone: null} pickupDate={selectedDate} pickupTime={selectedTime} price={isOneWay ? estimatedPrice[0] : estimatedPrice} returnPrice={isOneWay ? estimatedPrice[1] : null} numAdultSeats={adults} numChildSeats={children} customerNote={comment} returnDate={returnDate} returnTime={returnTime} vehicleID={selectedFleetID} vehicleCategory={selectedFleetValue} duration={!isOneWay ? duration : null} login = {login} signup={signup} lang={lang}/>
     </div>
     :
     <form ref={formRef} className="relative inset-0 bg-white w-[100%] flex mt-[-20] lg:mt-0 lg:pt-15 lg:p-8 lg:w-max flex-col items-center text-black h-max py-10 rounded-2xl shadow-custom">
@@ -635,7 +664,7 @@ export default function PickupFor({
                       }}
                       className="p-2 hover:bg-gray-100 cursor-pointer text-black"
                     >
-                      {place.place_name}
+                      {place.description}
                     </div>
                   ))}
                 </div>
@@ -691,7 +720,7 @@ export default function PickupFor({
                       }}
                       className="p-2 hover:bg-gray-100 cursor-pointer"
                     >
-                      {place.place_name}
+                      {place.description}
                     </div>
                   ))}
                 </div>
@@ -875,7 +904,7 @@ export default function PickupFor({
           </button>
         </div>
       </div>
-
+      <Child isVisible={childVisibility} visibility={setChildVisiblity} setChildSets={setChildSets} setTotal={setChildren}/>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
           <Baby className="w-4 h-4 md:w-5 md:h-5 text-stone-600" />
@@ -884,7 +913,7 @@ export default function PickupFor({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
+            onClick={() => {setChildVisiblity(true)}}
             className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Minus className="w-4 h-4" />
@@ -892,7 +921,7 @@ export default function PickupFor({
           <div className="w-max text-center rounded-md py-1 md:px-2">{children}</div>
           <button
             type="button"
-            onClick={() => setChildren((prev) => prev + 1)}
+            onClick={() => setChildVisiblity(true)}
             className="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 border-2 rounded-sm border-stone-200 hover:bg-stone-200"
           >
             <Plus className="w-4 h-4" />
@@ -934,6 +963,23 @@ export default function PickupFor({
         <p className="text-md mt-1 text-red-600 w-full text-center">{errors.phone.message}</p>
       )}
     </div>
+
+    <div className={`flex items-center w-90 max-w-[85%] mt-5 mb-[2 ${!validEmail ? 'red-wrapper':""}`}>
+    <Mail className="h-6 w-6 text-gray-600" />
+
+          <input type="text" 
+              name = "email"
+              onChange = {(e)=>setEmail(e.target.value)}
+              value = {email}
+              id="email"
+              className="border-b-2 p-2 border-stone-600 w-full outline-none resize-none overflow-hidden"
+              placeholder={`${signup.email}`}
+              required
+          />
+
+          {!validEmail && <span className='text-center m-auto flex items-center justify-center text-red-600 w-full'>Invalid Email</span>}
+
+      </div>
 
     <div className={`flex items-center w-90 max-w-[85%] mt-5 mb-[20px]`}>
       <MessageCircleMore className="h-6 w-6 text-gray-600" />

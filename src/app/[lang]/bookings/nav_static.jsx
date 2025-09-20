@@ -6,7 +6,8 @@ import LanguageSwitcher from '../switcher';
 
 export default function NavbarStatic({ home, contactUs, loginTitle, bookingTitle, logoutTitle, loggedIn, lang }) {
     const [loggedOut, setLogedOut] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const name = process.env.NEXT_PUBLIC_NAME ;
     const logout = async () =>{
         try{
             const response = await fetch('/api/logout', {
@@ -35,7 +36,7 @@ export default function NavbarStatic({ home, contactUs, loginTitle, bookingTitle
       }
     <div className='text-black lg:h-13 bg-transperent flex justify-between shadow-md items-center md:pl-10 md:pr-10 pr-3 pl-3 bg-white/20 backdrop-blur-sm fixed w-full z-40 top-0 left-0 h-15'>
       <Link href={`/${lang}`} className='text-yellow-1000 md:text-[19px] text-[15px] font-medium lg:font-bold hover:text-yellow-600 hover:scale-105'> 
-        <h3 className='text-[22px] font-bold'>TaxiDown</h3>
+        <h3 className='text-[20px] font-bold'>{name}</h3>
       </Link> 
       <div className="hidden sm:flex items-center gap-2 md:gap-5 lg:gap-10">
           <Link

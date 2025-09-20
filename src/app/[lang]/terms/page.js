@@ -135,13 +135,13 @@ export default async function TermsPage({params}) {
                 </h3>
                 <ul className="list-disc ml-7 text-slate-700">
                     <li className="my-3">
-                    <strong>Airports</strong> – 60 minutes of free waiting from actual flight arrival, tracked in real time.
+                    <strong>Airports</strong> - 60 minutes of free waiting from actual flight arrival, tracked in real time.
                     </li>
                     <li className="my-3">
-                    <strong>Hotels / Private Addresses</strong> – 15 minutes free waiting.
+                    <strong>Hotels / Private Addresses</strong> - 15 minutes free waiting.
                     </li>
                     <li className="my-3">
-                    <strong>Cruise Ports</strong> – 30 minutes free waiting.
+                    <strong>Cruise Ports</strong> - 30 minutes free waiting.
                     </li>
                 </ul>
                 <p className="my-3 text-slate-700">
@@ -213,10 +213,10 @@ export default async function TermsPage({params}) {
                 <h3 className="my-2 text-xl font-bold text-slate-900">4.3 Cancellation & Refund Policy</h3>
                 <ul className="list-disc ml-7 text-slate-700">
                     <li className="my-3">
-                    <strong>Full Refund</strong> – Cancellations made at least 24 hours before pickup.
+                    <strong>Full Refund</strong> - Cancellations made at least 24 hours before pickup.
                     </li>
                     <li className="my-3">
-                    <strong>No Refund</strong> – Cancellations within 24 hours of pickup or no-shows.
+                    <strong>No Refund</strong> - Cancellations within 24 hours of pickup or no-shows.
                     </li>
                 </ul>
                 <p className="my-3 text-slate-700">
@@ -232,7 +232,7 @@ export default async function TermsPage({params}) {
 
                 <h3 className="my-2 text-xl font-bold text-slate-900">4.5 Refund Processing</h3>
                 <p className="my-3 text-slate-700">
-                    Refunds will be made via the original payment method within 7–10 business days. Any payment provider fees
+                    Refunds will be made via the original payment method within 7-10 business days. Any payment provider fees
                     may be deducted unless the cancellation was our fault.
                 </p>
                 </div>
@@ -258,9 +258,9 @@ export default async function TermsPage({params}) {
 
                 <h3 className="my-2 text-xl font-bold text-slate-900">5.3 Waiting Time</h3>
                 <ul className="list-disc ml-7 text-slate-700">
-                    <li className="my-3">Airports – 60 minutes free from actual landing time.</li>
+                    <li className="my-3">Airports - 60 minutes free from actual landing time.</li>
                     <li className="my-3">
-                    Other Pickups – 15 minutes free from scheduled pickup time. Extra waiting time may be charged.
+                    Other Pickups - 15 minutes free from scheduled pickup time. Extra waiting time may be charged.
                     </li>
                 </ul>
 
@@ -296,9 +296,9 @@ export default async function TermsPage({params}) {
                     seat. We can provide:
                 </p>
                 <ul className="list-disc ml-7 text-slate-700">
-                    <li className="my-3">Infant seats (0–13 kg)</li>
-                    <li className="my-3">Child seats (9–18 kg)</li>
-                    <li className="my-3">Booster seats (15–36 kg)</li>
+                    <li className="my-3">Infant seats (0-13 kg)</li>
+                    <li className="my-3">Child seats (9-18 kg)</li>
+                    <li className="my-3">Booster seats (15-36 kg)</li>
                 </ul>
                 <p className="my-3 text-slate-700">Seats must be requested at booking to ensure availability.</p>
 

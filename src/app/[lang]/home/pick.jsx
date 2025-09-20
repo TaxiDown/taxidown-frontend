@@ -5,6 +5,7 @@ import { Calendar, Clock } from "lucide-react"
 import { redirect, useRouter } from "next/navigation";
 import SuccessModal from './modal';
 import PickLogin from './pick_login';
+import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from 'next/link';
 
@@ -46,6 +47,9 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
 
     const [isGuest, setIsGuest] = useState(false);
 
+    const services = ["Airport Transport", "Wedding Events", "Other.."]
+
+
 
     const handleChange = (fleetId) => {
         console.log(fleetId.key)
@@ -75,6 +79,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                 const response = await fetch(url)
                 const data = await response.json()
                 setPickupResults(data)
+                console.log(data);
               } catch (error) {
                 console.error("Pickup autocomplete failed:", error)
               }
@@ -228,7 +233,7 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
-                            {place.place_name}
+                            {place.description}
                         </div>
                     ))}
                 </div>
@@ -283,13 +288,33 @@ export default function Pick({ pick,  oneWay, perHour, pickupLocation, destinati
                             }}
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
-                            {place.place_name}
+                            {place.description}
                         </div>
                     ))}
                 </div>
             )}
         </div>
         )}
+
+        {
+            <div className="w-50 max-w-[85vw] mt-2 text-black text-lg">
+                <label className="block text-md font-medium text-black text-center">{pickdict.ourServices}</label>
+                <Select value={selectedFleetValue} className={cn('outline-none border-none shadow-none')}>
+                <SelectTrigger className="w-full h-14 bg-white border border-gray-200 outline-none focus:border-black text-2xl " >
+                    <SelectValue className="text-gray-300 font-medium outline-none" placeholder={`${pickdict.services}`} />
+                </SelectTrigger>
+                <SelectContent>
+                    {services.map((service, index) => (
+                    <SelectItem key={index} value={service}>
+                        <div className="flex items-center gap-2 text-lg font-semibold">
+                        <span>{service}</span>
+                    </div>
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+            </div>   
+        }
         
         <button className='cursor-pointer bg-black text-white rounded-sm text-[17px] p-3 transition-transform duration-300 hover:scale-103 hover:bg-white hover:border-2 hover:border-black hover:text-black w-[130px] mt-4 min-w-max' type='submit'>
             {getOffer}

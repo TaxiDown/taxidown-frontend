@@ -7,12 +7,12 @@ import { getDictionary } from '../../dictionaries.js'
 export default async function SignupPage({params}) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
-  console.log(lang);
+  const name = process.env.NEXT_PUBLIC_NAME
    
   return (
     <div className='flex items-center h-screen w-screen justify-between '>
         <div className='text-center flex justify-center items-center flex-col lg:w-[33vw] md:w-[40vw] shadow-2xl h-[100vh] bg-[#fcfcfa] w-[100vw]'>
-            <h1 className='text-[37px] truculenta font-medium mt-8 p-0 bg-gradient-to-r from-black via-red-700 to-yellow-400 bg-clip-text text-transparent'>TaxiDown</h1>
+            <h1 className='text-[24px] truculenta font-medium mt-8 p-0 bg-gradient-to-r from-black via-red-700 to-yellow-400 bg-clip-text text-transparent'>{name}</h1>
             <h3 className='text-[27px] truculenta font-bold mb-6 font-black'>Create Your Account</h3>
             <Signupform signup={dict.signup} lang={lang}/>
             <div className='text-[14px] mt-1'>{dict.signup.alreadyHaveAccount}  <Link href={`/${lang}/login`} className='text-yellow-500 hover:text-yellow-600'>{dict.lang.loginTitle}</Link>

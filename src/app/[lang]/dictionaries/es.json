@@ -150,6 +150,8 @@
   "hourPrice": "Precio por hora",
   "duration": "Duración del viaje",
   "hour": "hora",
-  "hours": "horas"
+  "hours": "horas", 
+  "services": "Seleccione uno de nuestros servicios",
+  "ourServices": "Nuestros servicios"
   }
 }
